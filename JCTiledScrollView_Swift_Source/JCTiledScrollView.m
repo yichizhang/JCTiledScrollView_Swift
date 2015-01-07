@@ -34,8 +34,9 @@
 
 #import "JCTiledScrollView.h"
 #import "JCTiledView.h"
-#import "JCAnnotation.h"
-#import "JCAnnotationView.h"
+
+#import "JCTiledScrollView-Swift.h"
+
 #import "JCVisibleAnnotationTuple.h"
 #import "ADAnnotationTapGestureRecognizer.h"
 
