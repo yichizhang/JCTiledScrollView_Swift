@@ -1,0 +1,71 @@
+//
+//  JCTiledView.swift
+//  JCTiledScrollView-Swift
+//
+//  Created by Yichi on 8/01/2015.
+//  Copyright (c) 2015 Yichi Zhang. All rights reserved.
+//
+
+import UIKit
+import QuartzCore
+
+protocol JCTiledViewDelegateAAA : NSObjectProtocol {
+	
+}
+
+protocol JCTiledBitmapViewDelegate: JCTiledViewDelegate {
+	func tiledView(tiledView:JCTiledView, imageForRow row:Int, column:Int, scale:Int) -> UIImage
+	func fuckYou()
+}
+
+class JCTiledView: UIView {
+	weak var delegate:JCTiledViewDelegateAAA?
+	private(set) var tileSize:CGSize = CGSizeZero
+	var shouldAnnotateRect:Bool = false
+	
+	var numberOfZoomLevels:size_t {
+		get{
+			return self.tiledLayer.levelsOfDetailBias
+		}
+		set{
+			self.tiledLayer.levelsOfDetailBias = newValue
+		}
+	}
+	var tiledLayer:JCTiledLayer{
+		return self.layer as JCTiledLayer
+	}
+	
+	let kDefaultTileSize:CGFloat = 256.0
+	
+	func annotateRect(rect:CGRect, inContext ctx:CGContextRef){
+		
+	}
+	
+	override class func layerClass() -> AnyClass{
+		return JCTiledLayer.self
+	}
+	
+	convenience override init(frame: CGRect) {
+		self.init(frame: frame)
+		let scaledTileSize = CGSizeApplyAffineTransform(self.tileSize, CGAffineTransformMakeScale(self.contentScaleFactor, self.contentScaleFactor))
+		self.tiledLayer.tileSize = scaledTileSize
+		self.tiledLayer.levelsOfDetail = 1
+		self.numberOfZoomLevels = 3
+		self.shouldAnnotateRect = false
+		self.tileSize = CGSizeMake(kDefaultTileSize, kDefaultTileSize)
+	}
+	
+	override func drawRect(rect: CGRect) {
+		let ctx = UIGraphicsGetCurrentContext()
+		let scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale
+		
+		let col = Int( CGRectGetMinX(rect) * scale / self.tileSize.width )
+		let row = Int( CGRectGetMinY(rect) * scale / self.tileSize.height )
+		
+		self.delegate!.fuckYou()
+		
+		let tileImage = self.delegate?.tiledView(tiledView:self, imageForRow:row, column:col, scale:Int(scale) )
+		tileImage.drawInRect(rect)
+		
+	}
+}

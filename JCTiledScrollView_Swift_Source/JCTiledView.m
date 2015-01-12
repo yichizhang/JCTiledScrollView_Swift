@@ -50,8 +50,8 @@ static const CGFloat kDefaultTileSize = 256.0f;
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if (self = [super initWithFrame:frame]) {
-        CGSize scaledTileSize = CGSizeApplyAffineTransform(self.tileSize, CGAffineTransformMakeScale(self.contentScaleFactor, self.contentScaleFactor));
+    if (self = [super initWithFrame:frame]) {		
+		CGSize scaledTileSize = CGSizeApplyAffineTransform(self.tileSize, CGAffineTransformMakeScale(self.contentScaleFactor, self.contentScaleFactor));
         self.tiledLayer.tileSize = scaledTileSize;
         self.tiledLayer.levelsOfDetail = 1;
         self.numberOfZoomLevels = 3;
