@@ -15,7 +15,6 @@ import Foundation
 
 class JCPDFTiledView : JCTiledView{
 	
-	let kDefaultTileSize:CGFloat = 256.0
 	override var tileSize:CGSize{
 		return CGSizeMake(kDefaultTileSize, kDefaultTileSize)
 	}

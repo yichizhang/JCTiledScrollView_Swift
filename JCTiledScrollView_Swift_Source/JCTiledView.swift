@@ -9,17 +9,18 @@
 import UIKit
 import QuartzCore
 
-protocol JCTiledViewDelegateAAA : NSObjectProtocol {
+@objc protocol JCTiledViewDelegate {
 	
 }
 
-protocol JCTiledBitmapViewDelegate: JCTiledViewDelegate {
+@objc protocol JCTiledBitmapViewDelegate: JCTiledViewDelegate {
 	func tiledView(tiledView:JCTiledView, imageForRow row:Int, column:Int, scale:Int) -> UIImage
 	func fuckYou()
 }
 
 class JCTiledView: UIView {
-	weak var delegate:JCTiledViewDelegateAAA?
+	
+	var delegate:JCTiledViewDelegate?
 	private(set) var tileSize:CGSize = CGSizeZero
 	var shouldAnnotateRect:Bool = false
 	
@@ -36,10 +37,6 @@ class JCTiledView: UIView {
 	}
 	
 	let kDefaultTileSize:CGFloat = 256.0
-	
-	func annotateRect(rect:CGRect, inContext ctx:CGContextRef){
-		
-	}
 	
 	override class func layerClass() -> AnyClass{
 		return JCTiledLayer.self
@@ -62,10 +59,27 @@ class JCTiledView: UIView {
 		let col = Int( CGRectGetMinX(rect) * scale / self.tileSize.width )
 		let row = Int( CGRectGetMinY(rect) * scale / self.tileSize.height )
 		
-		self.delegate!.fuckYou()
-		
-		let tileImage = self.delegate?.tiledView(tiledView:self, imageForRow:row, column:col, scale:Int(scale) )
+		let tileImage = (self.delegate as JCTiledBitmapViewDelegate).tiledView(self, imageForRow:row, column:col, scale:Int(scale) )
 		tileImage.drawInRect(rect)
+		
+	}
+	
+	// Handy for Debug
+	func annotateRect(rect:CGRect, inContext ctx:CGContextRef){
+		
+		let scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale
+		let lineWidth = 2.0 / scale
+		let fontSize = 16.0 / scale
+		
+		UIColor.whiteColor().set()
+		NSString.localizedStringWithFormat(" %0.0f", log2f( Float(scale) )).drawAtPoint(
+			CGPointMake(rect.minX, rect.minY),
+			withAttributes: [NSFontAttributeName: UIFont.boldSystemFontOfSize(fontSize)]
+		)
+		
+		UIColor.redColor().set()
+		CGContextSetLineWidth(ctx, lineWidth)
+		CGContextStrokeRect(ctx, rect)
 		
 	}
 }

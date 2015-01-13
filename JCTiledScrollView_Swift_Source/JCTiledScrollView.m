@@ -33,7 +33,6 @@
 //
 
 #import "JCTiledScrollView.h"
-#import "JCTiledView.h"
 
 #import "JCTiledScrollView-Swift.h"
 

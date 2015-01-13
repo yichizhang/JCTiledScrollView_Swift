@@ -1,5 +1,4 @@
 #import "ADAnnotationTapGestureRecognizer.h"
 #import "CGPDFDocument.h"
 #import "JCTiledScrollView.h"
-#import "JCTiledView.h"
 #import "JCVisibleAnnotationTuple.h"
