@@ -42,14 +42,18 @@ class JCTiledView: UIView {
 		return JCTiledLayer.self
 	}
 	
-	convenience override init(frame: CGRect) {
-		self.init(frame: frame)
+	override init(frame: CGRect) {
+		super.init(frame: frame)
 		let scaledTileSize = CGSizeApplyAffineTransform(self.tileSize, CGAffineTransformMakeScale(self.contentScaleFactor, self.contentScaleFactor))
 		self.tiledLayer.tileSize = scaledTileSize
 		self.tiledLayer.levelsOfDetail = 1
 		self.numberOfZoomLevels = 3
 		self.shouldAnnotateRect = false
 		self.tileSize = CGSizeMake(kDefaultTileSize, kDefaultTileSize)
+	}
+	
+	required init(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
 	}
 	
 	override func drawRect(rect: CGRect) {
