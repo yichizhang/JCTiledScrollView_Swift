@@ -16,7 +16,8 @@ import Foundation
 class JCPDFTiledView : JCTiledView{
 	
 	override var tileSize:CGSize{
-		return CGSizeMake(kDefaultTileSize, kDefaultTileSize)
+		return CGSizeMake(256, 256)
+		//return CGSizeMake(kDefaultTileSize, kDefaultTileSize)
 	}
 	
 	override func drawRect(rect: CGRect) {

@@ -15,7 +15,6 @@ import QuartzCore
 
 @objc protocol JCTiledBitmapViewDelegate: JCTiledViewDelegate {
 	func tiledView(tiledView:JCTiledView, imageForRow row:Int, column:Int, scale:Int) -> UIImage
-	func fuckYou()
 }
 
 class JCTiledView: UIView {
@@ -60,11 +59,15 @@ class JCTiledView: UIView {
 		let ctx = UIGraphicsGetCurrentContext()
 		let scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale
 		
-		let col = Int( CGRectGetMinX(rect) * scale / self.tileSize.width )
-		let row = Int( CGRectGetMinY(rect) * scale / self.tileSize.height )
+		let col = Int( rect.minX * scale / self.tileSize.width )
+		let row = Int( rect.minY * scale / self.tileSize.height )
 		
 		let tileImage = (self.delegate as JCTiledBitmapViewDelegate).tiledView(self, imageForRow:row, column:col, scale:Int(scale) )
 		tileImage.drawInRect(rect)
+		
+		if (self.shouldAnnotateRect){
+			self.annotateRect(rect, inContext: ctx)
+		}
 		
 	}
 	
