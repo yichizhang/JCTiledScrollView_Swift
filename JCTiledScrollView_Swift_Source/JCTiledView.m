@@ -28,7 +28,7 @@
 //
 
 #import "JCTiledView.h"
-#import "JCTiledLayer.h"
+#import "JCTiledScrollView-Swift.h"
 #import "math.h"
 
 static const CGFloat kDefaultTileSize = 256.0f;
