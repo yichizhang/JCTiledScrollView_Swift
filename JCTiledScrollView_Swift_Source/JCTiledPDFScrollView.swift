@@ -10,9 +10,6 @@ import UIKit
 
 class JCTiledPDFScrollView: JCTiledScrollView, JCPDFTiledViewDelegate {
 
-	private var documentRef:Unmanaged<CGPDFDocument>!
-	private var pageRef:Unmanaged<CGPDFPage>?
-	
 	private var document:CGPDFDocument!
 	private var currentPage:CGPDFPage!
 	
@@ -26,8 +23,7 @@ class JCTiledPDFScrollView: JCTiledScrollView, JCPDFTiledViewDelegate {
 	
 		if let tempDocument = CGPDFDocumentCreateX(url as CFURLRef, "") {
 
-			documentRef = tempDocument
-			self.document = documentRef.takeRetainedValue()
+			self.document = tempDocument.takeRetainedValue()
 			
 			if let tempPage = CGPDFDocumentGetPage(self.document, 1) {
 				
@@ -55,11 +51,11 @@ class JCTiledPDFScrollView: JCTiledScrollView, JCPDFTiledViewDelegate {
 	    fatalError("init(coder:) has not been implemented")
 	}
 	
-	func pdfPageForTiledView(tiledView: JCPDFTiledView!) -> Unmanaged<CGPDFPage>! {
-		return Unmanaged.passRetained( currentPage )
+	func pdfPageForTiledView(tiledView: JCPDFTiledView!) -> CGPDFPage? {
+		return currentPage
 	}
 	
-	func pdfDocumentForTiledView(tiledView: JCPDFTiledView!) -> Unmanaged<CGPDFDocument>! {
-		return documentRef
+	func pdfDocumentForTiledView(tiledView: JCPDFTiledView!) -> CGPDFDocument {
+		return document
 	}
 }
