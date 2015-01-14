@@ -33,9 +33,9 @@
 
 static const CGFloat kDefaultTileSize = 256.0f;
 
-@interface JCTiledView ()
-- (JCTiledLayer*)tiledLayer;
-@end
+//@interface JCTiledView ()
+//- (JCTiledLayer*)tiledLayer;
+//@end
 
 @implementation JCTiledView
 
@@ -55,7 +55,7 @@ static const CGFloat kDefaultTileSize = 256.0f;
         self.tiledLayer.tileSize = scaledTileSize;
         self.tiledLayer.levelsOfDetail = 1;
         self.numberOfZoomLevels = 3;
-        self.shouldAnnotateRect = NO;
+		self.shouldAnnotateRect = NO;
     }
     return self;
 }
@@ -84,32 +84,34 @@ static const CGFloat kDefaultTileSize = 256.0f;
 
 - (void)drawRect:(CGRect)rect
 {
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGFloat scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale;
-
-    NSInteger col = (NSInteger)((CGRectGetMinX(rect) * scale) / self.tileSize.width);
-    NSInteger row = (NSInteger)((CGRectGetMinY(rect) * scale) / self.tileSize.height);
-
-    UIImage* tile_image = [(id<JCTiledBitmapViewDelegate>)self.delegate tiledView:self imageForRow:row column:col scale:(NSInteger)scale];
-    [tile_image drawInRect:rect];
-
-    if (self.shouldAnnotateRect)
-        [self annotateRect:rect inContext:ctx];
+	[self test_drawRect:rect];
+//    CGContextRef ctx = UIGraphicsGetCurrentContext();
+//    CGFloat scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale;
+//
+//    NSInteger col = (NSInteger)((CGRectGetMinX(rect) * scale) / self.tileSize.width);
+//    NSInteger row = (NSInteger)((CGRectGetMinY(rect) * scale) / self.tileSize.height);
+//
+//    UIImage* tile_image = [(id<JCTiledBitmapViewDelegate>)self.delegate tiledView:self imageForRow:row column:col scale:(NSInteger)scale];
+//    [tile_image drawInRect:rect];
+//
+//    if (self.shouldAnnotateRect)
+//        [self annotateRect:rect inContext:ctx];
 }
 
 // Handy for Debug
 - (void)annotateRect:(CGRect)rect inContext:(CGContextRef)ctx
 {
-    CGFloat scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale;
-    CGFloat line_width = 2.0f / scale;
-    CGFloat font_size = 16.0f / scale;
-
-    [[UIColor whiteColor] set];
-    [[NSString stringWithFormat:@" %0.0f", log2f(scale)] drawAtPoint:CGPointMake(CGRectGetMinX(rect), CGRectGetMinY(rect)) withFont:[UIFont boldSystemFontOfSize:font_size]];
-
-    [[UIColor redColor] set];
-    CGContextSetLineWidth(ctx, line_width);
-    CGContextStrokeRect(ctx, rect);
+	[self test_annotateRect:rect inContext:ctx];
+//    CGFloat scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale;
+//    CGFloat line_width = 2.0f / scale;
+//    CGFloat font_size = 16.0f / scale;
+//
+//    [[UIColor whiteColor] set];
+//    [[NSString stringWithFormat:@" %0.0f", log2f(scale)] drawAtPoint:CGPointMake(CGRectGetMinX(rect), CGRectGetMinY(rect)) withFont:[UIFont boldSystemFontOfSize:font_size]];
+//
+//    [[UIColor redColor] set];
+//    CGContextSetLineWidth(ctx, line_width);
+//    CGContextStrokeRect(ctx, rect);
 }
 
 @end

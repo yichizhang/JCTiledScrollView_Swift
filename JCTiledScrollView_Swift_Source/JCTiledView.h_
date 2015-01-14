@@ -46,6 +46,7 @@
 @property (nonatomic, assign) size_t numberOfZoomLevels;
 @property (nonatomic, assign) BOOL shouldAnnotateRect;
 
+- (JCTiledLayer*)tiledLayer;
 - (void)annotateRect:(CGRect)rect inContext:(CGContextRef)ctx;
 
 @end

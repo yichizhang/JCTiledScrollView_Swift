@@ -20,22 +20,23 @@ import QuartzCore
 class JCTiledView: UIView {
 	
 	var delegate:JCTiledViewDelegate?
-	private(set) var tileSize:CGSize = CGSizeZero
+	private(set) var tileSize:CGSize = CGSizeMake(256, 256)
 	var shouldAnnotateRect:Bool = false
 	
 	var numberOfZoomLevels:size_t {
 		get{
-			return self.tiledLayer.levelsOfDetailBias
+			return self.tiledLayer().levelsOfDetailBias
 		}
 		set{
-			self.tiledLayer.levelsOfDetailBias = newValue
+			self.tiledLayer().levelsOfDetailBias = newValue
 		}
-	}
-	var tiledLayer:JCTiledLayer{
-		return self.layer as JCTiledLayer
 	}
 	
 	let kDefaultTileSize:CGFloat = 256.0
+	
+	func tiledLayer() -> JCTiledLayer{
+		return self.layer as JCTiledLayer
+	}
 	
 	override class func layerClass() -> AnyClass{
 		return JCTiledLayer.self
@@ -44,11 +45,9 @@ class JCTiledView: UIView {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		let scaledTileSize = CGSizeApplyAffineTransform(self.tileSize, CGAffineTransformMakeScale(self.contentScaleFactor, self.contentScaleFactor))
-		self.tiledLayer.tileSize = scaledTileSize
-		self.tiledLayer.levelsOfDetail = 1
+		self.tiledLayer().tileSize = scaledTileSize
+		self.tiledLayer().levelsOfDetail = 1
 		self.numberOfZoomLevels = 3
-		self.shouldAnnotateRect = false
-		self.tileSize = CGSizeMake(kDefaultTileSize, kDefaultTileSize)
 	}
 	
 	required init(coder aDecoder: NSCoder) {
@@ -57,7 +56,7 @@ class JCTiledView: UIView {
 	
 	override func drawRect(rect: CGRect) {
 		let ctx = UIGraphicsGetCurrentContext()
-		let scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale
+		let scale = CGContextGetCTM(ctx).a / self.tiledLayer().contentsScale
 		
 		let col = Int( rect.minX * scale / self.tileSize.width )
 		let row = Int( rect.minY * scale / self.tileSize.height )
@@ -74,7 +73,7 @@ class JCTiledView: UIView {
 	// Handy for Debug
 	func annotateRect(rect:CGRect, inContext ctx:CGContextRef){
 		
-		let scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale
+		let scale = CGContextGetCTM(ctx).a / self.tiledLayer().contentsScale
 		let lineWidth = 2.0 / scale
 		let fontSize = 16.0 / scale
 		
