@@ -36,7 +36,6 @@
 
 #import "JCTiledScrollView-Swift.h"
 
-#import "JCVisibleAnnotationTuple.h"
 #import "ADAnnotationTapGestureRecognizer.h"
 
 #define kStandardUIScrollViewAnimationTime (int64_t)0.10
