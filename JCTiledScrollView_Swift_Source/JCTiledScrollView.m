@@ -151,25 +151,17 @@
 
 - (UIView*)viewForZoomingInScrollView:(__unused UIScrollView*)scrollView
 {
-    return self.tiledView;
+	return [self t_viewForZoomingInScrollView:scrollView];
 }
 
 - (void)scrollViewDidZoom:(__unused UIScrollView*)scrollView
 {
-    if ([self.tiledScrollViewDelegate
-            respondsToSelector:@selector(tiledScrollViewDidZoom:)]) {
-        [self.tiledScrollViewDelegate tiledScrollViewDidZoom:self];
-    }
+	[self t_scrollViewDidZoom:scrollView];
 }
 
 - (void)scrollViewDidScroll:(__unused UIScrollView*)scrollView
 {
-    [self correctScreenPositionOfAnnotations];
-
-    if ([self.tiledScrollViewDelegate
-            respondsToSelector:@selector(tiledScrollViewDidScroll:)]) {
-        [self.tiledScrollViewDelegate tiledScrollViewDidScroll:self];
-    }
+	[self t_scrollViewDidScroll:scrollView];
 }
 
 #pragma mark -
@@ -190,67 +182,68 @@
 
 - (void)singleTapReceived:(UITapGestureRecognizer*)gestureRecognizer
 {
-    if ([gestureRecognizer
-            isKindOfClass:[ADAnnotationTapGestureRecognizer class]]) {
-        ADAnnotationTapGestureRecognizer* annotationGestureRecognizer = (ADAnnotationTapGestureRecognizer*)gestureRecognizer;
-
-        _previousSelectedAnnotationTuple = _currentSelectedAnnotationTuple;
-        _currentSelectedAnnotationTuple = annotationGestureRecognizer.tapAnnotation;
-
-        if (nil == annotationGestureRecognizer.tapAnnotation) {
-            if (_previousSelectedAnnotationTuple != nil) {
-                if ([self.tiledScrollViewDelegate
-                        respondsToSelector:@selector(tiledScrollView:
-                                               didDeselectAnnotationView:)]) {
-                    [self.tiledScrollViewDelegate
-                                  tiledScrollView:self
-                        didDeselectAnnotationView:_previousSelectedAnnotationTuple.view];
-                }
-            }
-            else if (self.centerSingleTap) {
-                [self setContentCenter:[gestureRecognizer locationInView:self.tiledView]
-                              animated:YES];
-            }
-
-            if ([self.tiledScrollViewDelegate
-                    respondsToSelector:@selector(tiledScrollView:
-                                             didReceiveSingleTap:)]) {
-                [self.tiledScrollViewDelegate tiledScrollView:self
-                                          didReceiveSingleTap:gestureRecognizer];
-            }
-        }
-        else {
-
-            if (_previousSelectedAnnotationTuple != nil) {
-
-                JCAnnotationView* oldSelectedAnnotationView = _previousSelectedAnnotationTuple.view;
-
-                if (oldSelectedAnnotationView == nil) {
-                    oldSelectedAnnotationView = [_tiledScrollViewDelegate
-                          tiledScrollView:self
-                        viewForAnnotation:_previousSelectedAnnotationTuple.annotation];
-                }
-                if ([self.tiledScrollViewDelegate
-                        respondsToSelector:@selector(tiledScrollView:
-                                               didDeselectAnnotationView:)]) {
-                    [self.tiledScrollViewDelegate
-                                  tiledScrollView:self
-                        didDeselectAnnotationView:oldSelectedAnnotationView];
-                }
-            }
-
-            if (_currentSelectedAnnotationTuple != nil) {
-                JCAnnotationView* currentSelectedAnnotationView = annotationGestureRecognizer.tapAnnotation.view;
-                if ([self.tiledScrollViewDelegate
-                        respondsToSelector:@selector(tiledScrollView:
-                                               didSelectAnnotationView:)]) {
-                    [self.tiledScrollViewDelegate
-                                tiledScrollView:self
-                        didSelectAnnotationView:currentSelectedAnnotationView];
-                }
-            }
-        }
-    }
+	[self t_singleTapReceived:gestureRecognizer];
+//    if ([gestureRecognizer
+//            isKindOfClass:[ADAnnotationTapGestureRecognizer class]]) {
+//        ADAnnotationTapGestureRecognizer* annotationGestureRecognizer = (ADAnnotationTapGestureRecognizer*)gestureRecognizer;
+//
+//        _previousSelectedAnnotationTuple = _currentSelectedAnnotationTuple;
+//        _currentSelectedAnnotationTuple = annotationGestureRecognizer.tapAnnotation;
+//
+//        if (nil == annotationGestureRecognizer.tapAnnotation) {
+//            if (_previousSelectedAnnotationTuple != nil) {
+//                if ([self.tiledScrollViewDelegate
+//                        respondsToSelector:@selector(tiledScrollView:
+//                                               didDeselectAnnotationView:)]) {
+//                    [self.tiledScrollViewDelegate
+//                                  tiledScrollView:self
+//                        didDeselectAnnotationView:_previousSelectedAnnotationTuple.view];
+//                }
+//            }
+//            else if (self.centerSingleTap) {
+//                [self setContentCenter:[gestureRecognizer locationInView:self.tiledView]
+//                              animated:YES];
+//            }
+//
+//            if ([self.tiledScrollViewDelegate
+//                    respondsToSelector:@selector(tiledScrollView:
+//                                             didReceiveSingleTap:)]) {
+//                [self.tiledScrollViewDelegate tiledScrollView:self
+//                                          didReceiveSingleTap:gestureRecognizer];
+//            }
+//        }
+//        else {
+//
+//            if (_previousSelectedAnnotationTuple != nil) {
+//
+//                JCAnnotationView* oldSelectedAnnotationView = _previousSelectedAnnotationTuple.view;
+//
+//                if (oldSelectedAnnotationView == nil) {
+//                    oldSelectedAnnotationView = [_tiledScrollViewDelegate
+//                          tiledScrollView:self
+//                        viewForAnnotation:_previousSelectedAnnotationTuple.annotation];
+//                }
+//                if ([self.tiledScrollViewDelegate
+//                        respondsToSelector:@selector(tiledScrollView:
+//                                               didDeselectAnnotationView:)]) {
+//                    [self.tiledScrollViewDelegate
+//                                  tiledScrollView:self
+//                        didDeselectAnnotationView:oldSelectedAnnotationView];
+//                }
+//            }
+//
+//            if (_currentSelectedAnnotationTuple != nil) {
+//                JCAnnotationView* currentSelectedAnnotationView = annotationGestureRecognizer.tapAnnotation.view;
+//                if ([self.tiledScrollViewDelegate
+//                        respondsToSelector:@selector(tiledScrollView:
+//                                               didSelectAnnotationView:)]) {
+//                    [self.tiledScrollViewDelegate
+//                                tiledScrollView:self
+//                        didSelectAnnotationView:currentSelectedAnnotationView];
+//                }
+//            }
+//        }
+//    }
 }
 
 - (void)doubleTapReceived:(UITapGestureRecognizer*)gestureRecognizer
