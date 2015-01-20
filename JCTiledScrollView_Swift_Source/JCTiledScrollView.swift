@@ -8,8 +8,9 @@
 
 import Foundation
 
+let kJCTiledScrollViewAnimationTime = Int64(0.1 * Double(NSEC_PER_SEC))
+
 extension JCTiledScrollView{
-	
 	
 	func t_viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
 		return self.tiledView
@@ -58,6 +59,46 @@ extension JCTiledScrollView{
 				}
 			} // if nil == annotationGestureRecognizer.tapAnnotation
 		} //  if gestureRecognizer.isKindOfClass(ADAnnotationTapGestureRecognizer.self)
-	} // end of fuction
+	} // end of singleTapReceived(gestureRecognizer:UITapGestureRecognizer)
 	
+	func t_doubleTapReceived(gestureRecognizer:UITapGestureRecognizer) {
+		if self.zoomsInOnDoubleTap{
+			
+			let newZoom = CGFloat(
+				min(
+					powf( 2, Float( log2(self.scrollView.zoomScale) + 1.0 ) ),
+					Float( self.scrollView.maximumZoomScale )
+					)
+			) // zoom in one level of detail
+			
+			self.muteAnnotationUpdates = true
+			
+			let popTime = dispatch_time(
+				DISPATCH_TIME_NOW, kJCTiledScrollViewAnimationTime);
+			dispatch_after(popTime, dispatch_get_main_queue(), {
+				self.muteAnnotationUpdates = false
+			})
+			
+			if self.zoomsToTouchLocation {
+				let bounds = scrollView.bounds
+				let pointInView = CGPointApplyAffineTransform(
+					gestureRecognizer.locationInView(scrollView),
+					CGAffineTransformMakeScale(1 / scrollView.zoomScale, 1 / scrollView.zoomScale)
+				)
+				let newSize = CGSizeApplyAffineTransform(
+					bounds.size,
+					CGAffineTransformMakeScale(1 / newZoom, 1 / newZoom)
+				)
+				
+				scrollView.zoomToRect(CGRectMake(pointInView.x - (newSize.width / 2),
+					pointInView.y - (newSize.height / 2), newSize.width, newSize.height), animated: true)
+			} else {
+				scrollView.setZoomScale(newZoom, animated: true)
+			}
+			// if self.zoomsToTouchLocation
+			
+		} // if self.zoomsInOnDoubleTap
+		
+		self.tiledScrollViewDelegate.tiledScrollView?(self, didReceiveDoubleTap: gestureRecognizer)
+	} // end of doubleTapReceived(gestureRecognizer:UITapGestureRecognizer)
 }

@@ -47,32 +47,9 @@
 @property (nonatomic, strong) UITapGestureRecognizer* doubleTapGestureRecognizer;
 @property (nonatomic, strong)
     UITapGestureRecognizer* twoFingerTapGestureRecognizer;
-@property (nonatomic, assign) BOOL muteAnnotationUpdates;
 @end
 
 @implementation JCTiledScrollView
-
-@synthesize tiledScrollViewDelegate = _tiledScrollViewDelegate;
-@synthesize dataSource = _dataSource;
-
-@synthesize levelsOfZoom = _levelsOfZoom;
-@synthesize levelsOfDetail = _levelsOfDetail;
-@dynamic zoomScale;
-
-@synthesize tiledView = _tiledView;
-@synthesize scrollView = _scrollView;
-@synthesize canvasView = _canvasView;
-
-@synthesize singleTapGestureRecognizer = _singleTapGestureRecognizer;
-@synthesize doubleTapGestureRecognizer = _doubleTapGestureRecognizer;
-@synthesize twoFingerTapGestureRecognizer = _twoFingerTapGestureRecognizer;
-
-@synthesize zoomsOutOnTwoFingerTap = _zoomsOutOnTwoFingerTap;
-@synthesize zoomsInOnDoubleTap = _zoomsInOnDoubleTap;
-@synthesize zoomsToTouchLocation = _zoomsToTouchLocation;
-@synthesize centerSingleTap = _centerSingleTap;
-
-@synthesize muteAnnotationUpdates = _muteAnnotationUpdates;
 
 + (Class)tiledLayerClass
 {
@@ -183,107 +160,11 @@
 - (void)singleTapReceived:(UITapGestureRecognizer*)gestureRecognizer
 {
 	[self t_singleTapReceived:gestureRecognizer];
-//    if ([gestureRecognizer
-//            isKindOfClass:[ADAnnotationTapGestureRecognizer class]]) {
-//        ADAnnotationTapGestureRecognizer* annotationGestureRecognizer = (ADAnnotationTapGestureRecognizer*)gestureRecognizer;
-//
-//        _previousSelectedAnnotationTuple = _currentSelectedAnnotationTuple;
-//        _currentSelectedAnnotationTuple = annotationGestureRecognizer.tapAnnotation;
-//
-//        if (nil == annotationGestureRecognizer.tapAnnotation) {
-//            if (_previousSelectedAnnotationTuple != nil) {
-//                if ([self.tiledScrollViewDelegate
-//                        respondsToSelector:@selector(tiledScrollView:
-//                                               didDeselectAnnotationView:)]) {
-//                    [self.tiledScrollViewDelegate
-//                                  tiledScrollView:self
-//                        didDeselectAnnotationView:_previousSelectedAnnotationTuple.view];
-//                }
-//            }
-//            else if (self.centerSingleTap) {
-//                [self setContentCenter:[gestureRecognizer locationInView:self.tiledView]
-//                              animated:YES];
-//            }
-//
-//            if ([self.tiledScrollViewDelegate
-//                    respondsToSelector:@selector(tiledScrollView:
-//                                             didReceiveSingleTap:)]) {
-//                [self.tiledScrollViewDelegate tiledScrollView:self
-//                                          didReceiveSingleTap:gestureRecognizer];
-//            }
-//        }
-//        else {
-//
-//            if (_previousSelectedAnnotationTuple != nil) {
-//
-//                JCAnnotationView* oldSelectedAnnotationView = _previousSelectedAnnotationTuple.view;
-//
-//                if (oldSelectedAnnotationView == nil) {
-//                    oldSelectedAnnotationView = [_tiledScrollViewDelegate
-//                          tiledScrollView:self
-//                        viewForAnnotation:_previousSelectedAnnotationTuple.annotation];
-//                }
-//                if ([self.tiledScrollViewDelegate
-//                        respondsToSelector:@selector(tiledScrollView:
-//                                               didDeselectAnnotationView:)]) {
-//                    [self.tiledScrollViewDelegate
-//                                  tiledScrollView:self
-//                        didDeselectAnnotationView:oldSelectedAnnotationView];
-//                }
-//            }
-//
-//            if (_currentSelectedAnnotationTuple != nil) {
-//                JCAnnotationView* currentSelectedAnnotationView = annotationGestureRecognizer.tapAnnotation.view;
-//                if ([self.tiledScrollViewDelegate
-//                        respondsToSelector:@selector(tiledScrollView:
-//                                               didSelectAnnotationView:)]) {
-//                    [self.tiledScrollViewDelegate
-//                                tiledScrollView:self
-//                        didSelectAnnotationView:currentSelectedAnnotationView];
-//                }
-//            }
-//        }
-//    }
 }
 
 - (void)doubleTapReceived:(UITapGestureRecognizer*)gestureRecognizer
 {
-    if (self.zoomsInOnDoubleTap) {
-        float newZoom = MIN(powf(2, (log2f(_scrollView.zoomScale) + 1.0f)),
-                            _scrollView.maximumZoomScale); // zoom in one level of detail
-
-        self.muteAnnotationUpdates = YES;
-        dispatch_time_t popTime = dispatch_time(
-            DISPATCH_TIME_NOW, kStandardUIScrollViewAnimationTime * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(),
-                       ^(void) { [self setMuteAnnotationUpdates:NO]; });
-
-        if (self.zoomsToTouchLocation) {
-            CGRect bounds = _scrollView.bounds;
-            CGPoint pointInView = CGPointApplyAffineTransform(
-                [gestureRecognizer locationInView:_scrollView],
-                CGAffineTransformMakeScale(1 / _scrollView.zoomScale,
-                                           1 / _scrollView.zoomScale));
-            CGSize newSize = CGSizeApplyAffineTransform(
-                bounds.size, CGAffineTransformMakeScale(1 / newZoom, 1 / newZoom));
-            [_scrollView zoomToRect:(CGRect) {
-        {
-          pointInView.x - (newSize.width / 2),
-              pointInView.y - (newSize.height / 2)
-        }
-        , newSize
-            } animated:YES];
-        }
-        else {
-            [_scrollView setZoomScale:newZoom animated:YES];
-        }
-    }
-
-    if ([self.tiledScrollViewDelegate
-            respondsToSelector:@selector(tiledScrollView:didReceiveDoubleTap:)]) {
-        [self.tiledScrollViewDelegate tiledScrollView:self
-                                  didReceiveDoubleTap:gestureRecognizer];
-    }
+	[self t_doubleTapReceived:gestureRecognizer];
 }
 
 - (void)twoFingerTapReceived:(UITapGestureRecognizer*)gestureRecognizer

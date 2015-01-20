@@ -71,6 +71,7 @@
 @property (nonatomic, strong) JCVisibleAnnotationTuple* currentSelectedAnnotationTuple;
 @property (nonatomic, strong) NSMutableSet *annotations;
 - (void)correctScreenPositionOfAnnotations;
+@property (nonatomic, assign) BOOL muteAnnotationUpdates;
 ////
 
 //Delegates
