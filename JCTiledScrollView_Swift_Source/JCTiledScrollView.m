@@ -169,37 +169,12 @@
 
 - (void)twoFingerTapReceived:(UITapGestureRecognizer*)gestureRecognizer
 {
-	
 	[self t_twoFingerTapReceived:gestureRecognizer];
-	return;
-	
-    if (self.zoomsOutOnTwoFingerTap) {
-        float newZoom = MAX(powf(2, (log2f(_scrollView.zoomScale) - 1.0f)),
-                            _scrollView.minimumZoomScale); // zoom out one level of detail
-
-        self.muteAnnotationUpdates = YES;
-        dispatch_time_t popTime = dispatch_time(
-            DISPATCH_TIME_NOW, kStandardUIScrollViewAnimationTime * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(),
-                       ^(void) { [self setMuteAnnotationUpdates:NO]; });
-
-        [_scrollView setZoomScale:newZoom animated:YES];
-    }
-
-    if ([self.tiledScrollViewDelegate
-            respondsToSelector:@selector(tiledScrollView:
-                                   didReceiveTwoFingerTap:)]) {
-        [self.tiledScrollViewDelegate tiledScrollView:self
-                               didReceiveTwoFingerTap:gestureRecognizer];
-    }
 }
 
 - (CGPoint)screenPositionForAnnotation:(id<JCAnnotation>)annotation
 {
-    CGPoint position;
-    position.x = (annotation.contentPosition.x * self.zoomScale) - _scrollView.contentOffset.x;
-    position.y = (annotation.contentPosition.y * self.zoomScale) - _scrollView.contentOffset.y;
-    return position;
+	return [self t_screenPositionForAnnotation:annotation];
 }
 
 - (void)correctScreenPositionOfAnnotations
@@ -332,17 +307,17 @@
 
 #pragma mark - JCTiledScrollView
 
-- (float)zoomScale
+- (CGFloat)zoomScale
 {
     return _scrollView.zoomScale;
 }
 
-- (void)setZoomScale:(float)zoomScale
+- (void)setZoomScale:(CGFloat)zoomScale
 {
     [self setZoomScale:zoomScale animated:NO];
 }
 
-- (void)setZoomScale:(float)zoomScale animated:(BOOL)animated
+- (void)setZoomScale:(CGFloat)zoomScale animated:(BOOL)animated
 {
     [_scrollView setZoomScale:zoomScale animated:animated];
 }
