@@ -169,6 +169,10 @@
 
 - (void)twoFingerTapReceived:(UITapGestureRecognizer*)gestureRecognizer
 {
+	
+	[self t_twoFingerTapReceived:gestureRecognizer];
+	return;
+	
     if (self.zoomsOutOnTwoFingerTap) {
         float newZoom = MAX(powf(2, (log2f(_scrollView.zoomScale) - 1.0f)),
                             _scrollView.minimumZoomScale); // zoom out one level of detail

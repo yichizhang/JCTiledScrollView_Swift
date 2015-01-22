@@ -101,4 +101,29 @@ extension JCTiledScrollView{
 		
 		self.tiledScrollViewDelegate.tiledScrollView?(self, didReceiveDoubleTap: gestureRecognizer)
 	} // end of doubleTapReceived(gestureRecognizer:UITapGestureRecognizer)
+	
+	func t_twoFingerTapReceived(gestureRecognizer:UITapGestureRecognizer) {
+		if self.zoomsOutOnTwoFingerTap{
+			
+			let newZoom = CGFloat(
+				max(
+					powf( 2, Float( log2(self.scrollView.zoomScale) - 1.0 ) ),
+					Float( self.scrollView.minimumZoomScale )
+				)
+			) // zoom out one level of detail
+			
+			self.muteAnnotationUpdates = true
+			
+			let popTime = dispatch_time(
+				DISPATCH_TIME_NOW, kJCTiledScrollViewAnimationTime);
+			dispatch_after(popTime, dispatch_get_main_queue(), {
+				self.muteAnnotationUpdates = false
+			})
+			
+			scrollView.setZoomScale(newZoom, animated: true)
+		}
+		
+		self.tiledScrollViewDelegate.tiledScrollView?(self, didReceiveTwoFingerTap: gestureRecognizer)
+	}
+	
 }
