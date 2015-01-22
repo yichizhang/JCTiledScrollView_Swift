@@ -8,9 +8,20 @@
 
 import Foundation
 
-let kJCTiledScrollViewAnimationTime = Int64(0.1 * Double(NSEC_PER_SEC))
+let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 
 extension JCTiledScrollView{
+	
+	func makeMuteAnnotationUpdatesTrueFor(time:NSTimeInterval){
+		
+		self.muteAnnotationUpdates = true
+		
+		let popTime = dispatch_time(
+			DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC)) )
+		dispatch_after(popTime, dispatch_get_main_queue(), {
+			self.muteAnnotationUpdates = false
+		})
+	}
 	
 	func t_viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
 		return self.tiledView
@@ -64,20 +75,9 @@ extension JCTiledScrollView{
 	func t_doubleTapReceived(gestureRecognizer:UITapGestureRecognizer) {
 		if self.zoomsInOnDoubleTap{
 			
-			let newZoom = CGFloat(
-				min(
-					powf( 2, Float( log2(self.scrollView.zoomScale) + 1.0 ) ),
-					Float( self.scrollView.maximumZoomScale )
-					)
-			) // zoom in one level of detail
+			let newZoom = self.scrollView.jc_zoomScaleByZoomingIn(1.0)
 			
-			self.muteAnnotationUpdates = true
-			
-			let popTime = dispatch_time(
-				DISPATCH_TIME_NOW, kJCTiledScrollViewAnimationTime);
-			dispatch_after(popTime, dispatch_get_main_queue(), {
-				self.muteAnnotationUpdates = false
-			})
+			self.makeMuteAnnotationUpdatesTrueFor(kJCTiledScrollViewAnimationTime)
 			
 			if self.zoomsToTouchLocation {
 				let bounds = scrollView.bounds
@@ -105,20 +105,9 @@ extension JCTiledScrollView{
 	func t_twoFingerTapReceived(gestureRecognizer:UITapGestureRecognizer) {
 		if self.zoomsOutOnTwoFingerTap{
 			
-			let newZoom = CGFloat(
-				max(
-					powf( 2, Float( log2(self.scrollView.zoomScale) - 1.0 ) ),
-					Float( self.scrollView.minimumZoomScale )
-				)
-			) // zoom out one level of detail
+			let newZoom = self.scrollView.jc_zoomScaleByZoomingOut(1.0)
 			
-			self.muteAnnotationUpdates = true
-			
-			let popTime = dispatch_time(
-				DISPATCH_TIME_NOW, kJCTiledScrollViewAnimationTime);
-			dispatch_after(popTime, dispatch_get_main_queue(), {
-				self.muteAnnotationUpdates = false
-			})
+			self.makeMuteAnnotationUpdatesTrueFor(kJCTiledScrollViewAnimationTime)
 			
 			scrollView.setZoomScale(newZoom, animated: true)
 		}
@@ -126,4 +115,10 @@ extension JCTiledScrollView{
 		self.tiledScrollViewDelegate.tiledScrollView?(self, didReceiveTwoFingerTap: gestureRecognizer)
 	}
 	
+	func t_screenPositionForAnnotation(annotation: JCAnnotation) -> CGPoint{
+		var position = CGPointZero
+		position.x = (annotation.contentPosition.x * self.zoomScale) - scrollView.contentOffset.x
+		position.y = (annotation.contentPosition.y * self.zoomScale) - scrollView.contentOffset.y
+		return position
+	}
 }
