@@ -1,6 +1,6 @@
 //
 //  JCTiledScrollView.swift
-//  campusmap-swift
+//  JCTiledScrollView-Swift
 //
 //  Created by Yichi on 19/01/2015.
 //  Copyright (c) 2015 Yichi Zhang. All rights reserved.
@@ -11,6 +11,8 @@ import Foundation
 let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 
 extension JCTiledScrollView{
+	
+	// MARK: Gesture Support
 	
 	func makeMuteAnnotationUpdatesTrueFor(time:NSTimeInterval){
 		
@@ -120,5 +122,28 @@ extension JCTiledScrollView{
 		position.x = (annotation.contentPosition.x * self.zoomScale) - scrollView.contentOffset.x
 		position.y = (annotation.contentPosition.y * self.zoomScale) - scrollView.contentOffset.y
 		return position
+	}
+	
+	// MARK: UIGestureRecognizerDelegate
+	
+	/** Catch our own tap gesture if it is on an annotation view to set annotation. Return NO to only recognize single tap on annotation
+	*/
+	func t_gestureRecognizerShouldBegin(gestureRecognizer:UIGestureRecognizer) -> Bool {
+		
+		let location = gestureRecognizer.locationInView(self.canvasView)
+
+		(gestureRecognizer as? ADAnnotationTapGestureRecognizer)?.tapAnnotation = nil
+		
+		for obj in self.visibleAnnotations{
+			let t = obj as JCVisibleAnnotationTuple
+			if CGRectContainsPoint(t.view.frame, location){
+				
+				(gestureRecognizer as? ADAnnotationTapGestureRecognizer)?.tapAnnotation = t
+				return true
+			}
+		}
+		
+		// Deal with all tap gesture
+		return true
 	}
 }

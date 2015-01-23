@@ -58,18 +58,14 @@
 
 @end
 
-@interface JCTiledScrollView : UIView <UIScrollViewDelegate> {
-@private
-    NSMutableSet* _recycledAnnotationViews;
-//    NSMutableSet* _annotations;
-    NSMutableSet* _visibleAnnotations;
-}
-
+@interface JCTiledScrollView : UIView <UIScrollViewDelegate>
 ////
 // Meant to be private but ...
 @property (nonatomic, strong) JCVisibleAnnotationTuple* previousSelectedAnnotationTuple;
 @property (nonatomic, strong) JCVisibleAnnotationTuple* currentSelectedAnnotationTuple;
 @property (nonatomic, strong) NSMutableSet *annotations;
+@property (nonatomic, strong) NSMutableSet *recycledAnnotationViews;
+@property (nonatomic, strong) NSMutableSet *visibleAnnotations;
 - (void)correctScreenPositionOfAnnotations;
 @property (nonatomic, assign) BOOL muteAnnotationUpdates;
 

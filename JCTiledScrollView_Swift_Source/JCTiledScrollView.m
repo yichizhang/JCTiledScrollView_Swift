@@ -282,27 +282,7 @@
 // Return NO to only recognize single tap on annotation
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer*)gestureRecognizer
 {
-    CGPoint location = [gestureRecognizer locationInView:self.canvasView];
-
-    if ([gestureRecognizer
-            isKindOfClass:[ADAnnotationTapGestureRecognizer class]]) {
-        [(ADAnnotationTapGestureRecognizer*)gestureRecognizer
-            setTapAnnotation:nil];
-    }
-
-    for (JCVisibleAnnotationTuple* t in _visibleAnnotations) {
-        if (CGRectContainsPoint(t.view.frame, location)) {
-            if ([gestureRecognizer
-                    isKindOfClass:[ADAnnotationTapGestureRecognizer class]]) {
-                [(ADAnnotationTapGestureRecognizer*)gestureRecognizer
-                    setTapAnnotation:t];
-            }
-            return YES;
-        }
-    }
-
-    // Deal with all tap gesture
-    return YES;
+	return [self t_gestureRecognizerShouldBegin:gestureRecognizer];
 }
 
 #pragma mark - JCTiledScrollView
