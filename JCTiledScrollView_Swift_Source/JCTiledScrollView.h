@@ -67,6 +67,7 @@
 @property (nonatomic, strong) NSMutableSet *recycledAnnotationViews;
 @property (nonatomic, strong) NSMutableSet *visibleAnnotations;
 - (void)correctScreenPositionOfAnnotations;
+- (BOOL)point:(CGPoint)point isWithinBounds:(CGRect)bounds;
 @property (nonatomic, assign) BOOL muteAnnotationUpdates;
 
 - (CGPoint)screenPositionForAnnotation:(id<JCAnnotation>)annotation;

@@ -373,75 +373,37 @@
 
 - (BOOL)point:(CGPoint)point isWithinBounds:(CGRect)bounds
 {
-    return CGRectContainsPoint(CGRectInset(bounds, -25., -25.), point);
+	return [self t_point:point isWithinBounds:bounds];
 }
 
 - (void)refreshAnnotations
 {
-    [self correctScreenPositionOfAnnotations];
-
-    for (id<JCAnnotation> annotation in _annotations) {
-
-        CGPoint screenPosition = [self screenPositionForAnnotation:annotation];
-        JCVisibleAnnotationTuple* t =
-            [_visibleAnnotations visibleAnnotationTupleForAnnotation:annotation];
-
-        [t.view setNeedsLayout];
-        [t.view setNeedsDisplay];
-    }
+	[self t_refreshAnnotations];
 }
 
 - (void)addAnnotation:(id<JCAnnotation>)annotation
 {
-    [_annotations addObject:annotation];
-
-    CGPoint screenPosition = [self screenPositionForAnnotation:annotation];
-
-    if ([self point:screenPosition isWithinBounds:self.bounds]) {
-        JCAnnotationView* view =
-            [_tiledScrollViewDelegate tiledScrollView:self
-                                    viewForAnnotation:annotation];
-        view.position = screenPosition;
-
-        JCVisibleAnnotationTuple* t =
-            [JCVisibleAnnotationTuple instanceWithAnnotation:annotation view:view];
-        [_visibleAnnotations addObject:t];
-
-        [_canvasView addSubview:view];
-    }
+	[self t_addAnnotation:annotation];
 }
 
 - (void)addAnnotations:(NSArray*)annotations
 {
-    for (id annotation in annotations) {
-        [self addAnnotation:annotation];
-    }
+	[self t_addAnnotations:annotations];
 }
 
 - (void)removeAnnotation:(id<JCAnnotation>)annotation
 {
-    if ([_annotations containsObject:annotation]) {
-        JCVisibleAnnotationTuple* t =
-            [_visibleAnnotations visibleAnnotationTupleForAnnotation:annotation];
-        if (t) {
-            [t.view removeFromSuperview];
-            [_visibleAnnotations removeObject:t];
-        }
-
-        [_annotations removeObject:annotation];
-    }
+	[self t_removeAnnotation:annotation];
 }
 
 - (void)removeAnnotations:(NSArray*)annotations
 {
-    for (id annotation in annotations) {
-        [self removeAnnotation:annotation];
-    }
+	[self t_removeAnnotations:annotations];
 }
 
 - (void)removeAllAnnotations
 {
-    [self removeAnnotations:[_annotations allObjects]];
+    [self t_removeAllAnnotations];
 }
 
 @end

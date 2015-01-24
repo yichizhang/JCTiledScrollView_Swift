@@ -146,4 +146,76 @@ extension JCTiledScrollView{
 		// Deal with all tap gesture
 		return true
 	}
+	
+	// MARK: Annotations
+	
+	func t_point(point:CGPoint, isWithinBounds bounds:CGRect) -> Bool{
+		return CGRectContainsPoint(CGRectInset(bounds, -25.0, -25.0), point)
+	}
+	
+	func t_refreshAnnotations(){
+		self.correctScreenPositionOfAnnotations()
+		
+		for obj in self.annotations{
+			let annotation = obj as JCAnnotation
+			
+			let t = self.visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation)
+			
+			t?.view.setNeedsLayout()
+			t?.view.setNeedsDisplay()
+		}
+	}
+	
+	func t_addAnnotation(annotation:JCAnnotation){
+		self.annotations.addObject(annotation)
+		
+		let screenPosition = self.screenPositionForAnnotation(annotation)
+		
+		if self.point(screenPosition, isWithinBounds: self.bounds) {
+			
+			let view = self.tiledScrollViewDelegate.tiledScrollView(self, viewForAnnotation: annotation)
+			view.position = screenPosition
+			
+			let t = JCVisibleAnnotationTuple(annotation: annotation, view: view)
+			self.visibleAnnotations.addObject(t)
+			
+			self.canvasView.addSubview(view)
+		}
+	}
+	
+	func t_addAnnotations(annotations:Array<JCAnnotation>){
+		for annotation in annotations {
+			self.addAnnotation(annotation)
+		}
+	}
+	
+	func t_removeAnnotation(annotation:JCAnnotation){
+		if self.annotations.containsObject(annotation) {
+			
+			if let t = self.visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation) {
+			
+				t.view.removeFromSuperview()
+				self.visibleAnnotations.removeObject(t)
+			}
+			
+			self.annotations.removeObject(annotation)
+		}
+	}
+	
+	func t_removeAnnotations(annotations:Array<JCAnnotation>){
+		for annotation in annotations {
+			self.removeAnnotation(annotation)
+		}
+	}
+	
+	func t_removeAllAnnotations(){
+		self.removeAnnotations(self.annotations.allObjects)
+	}
+	
+/*
+	func t_(){
+		
+	}
+*/
+	
 }
