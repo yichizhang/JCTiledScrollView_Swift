@@ -353,20 +353,7 @@
 - (JCAnnotationView*)dequeueReusableAnnotationViewWithReuseIdentifier:
                          (NSString*)reuseIdentifier
 {
-    id view = nil;
-
-    for (JCAnnotationView* obj in _recycledAnnotationViews) {
-        if ([[obj reuseIdentifier] isEqualToString:reuseIdentifier]) {
-            view = obj;
-            break;
-        }
-    }
-
-    if (nil != view) {
-        [_recycledAnnotationViews removeObject:view];
-        return view;
-    }
-    return nil;
+    return [self t_dequeueReusableAnnotationViewWithReuseIdentifier:reuseIdentifier];
 }
 
 #pragma mark - Annotations

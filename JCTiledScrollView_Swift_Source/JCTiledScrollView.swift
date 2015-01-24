@@ -147,6 +147,27 @@ extension JCTiledScrollView{
 		return true
 	}
 	
+	// MARK: Annotation Recycling
+	
+	func t_dequeueReusableAnnotationViewWithReuseIdentifier(reuseIdentifier:String) -> JCAnnotationView? {
+		var viewToReturn:JCAnnotationView? = nil
+		
+		for obj in self.recycledAnnotationViews {
+			let v = obj as JCAnnotationView
+			if v.reuseIdentifier == reuseIdentifier {
+				viewToReturn = v
+				break
+			}
+		}
+		
+		if viewToReturn != nil{
+			self.recycledAnnotationViews.removeObject(viewToReturn!)
+			
+		}
+		
+		return viewToReturn
+	}
+	
 	// MARK: Annotations
 	
 	func t_point(point:CGPoint, isWithinBounds bounds:CGRect) -> Bool{
