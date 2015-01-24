@@ -128,17 +128,17 @@
 
 - (UIView*)viewForZoomingInScrollView:(__unused UIScrollView*)scrollView
 {
-	return [self t_viewForZoomingInScrollView:scrollView];
+    return [self t_viewForZoomingInScrollView:scrollView];
 }
 
 - (void)scrollViewDidZoom:(__unused UIScrollView*)scrollView
 {
-	[self t_scrollViewDidZoom:scrollView];
+    [self t_scrollViewDidZoom:scrollView];
 }
 
 - (void)scrollViewDidScroll:(__unused UIScrollView*)scrollView
 {
-	[self t_scrollViewDidScroll:scrollView];
+    [self t_scrollViewDidScroll:scrollView];
 }
 
 #pragma mark -
@@ -159,22 +159,22 @@
 
 - (void)singleTapReceived:(UITapGestureRecognizer*)gestureRecognizer
 {
-	[self t_singleTapReceived:gestureRecognizer];
+    [self t_singleTapReceived:gestureRecognizer];
 }
 
 - (void)doubleTapReceived:(UITapGestureRecognizer*)gestureRecognizer
 {
-	[self t_doubleTapReceived:gestureRecognizer];
+    [self t_doubleTapReceived:gestureRecognizer];
 }
 
 - (void)twoFingerTapReceived:(UITapGestureRecognizer*)gestureRecognizer
 {
-	[self t_twoFingerTapReceived:gestureRecognizer];
+    [self t_twoFingerTapReceived:gestureRecognizer];
 }
 
 - (CGPoint)screenPositionForAnnotation:(id<JCAnnotation>)annotation
 {
-	return [self t_screenPositionForAnnotation:annotation];
+    return [self t_screenPositionForAnnotation:annotation];
 }
 
 - (void)correctScreenPositionOfAnnotations
@@ -282,25 +282,10 @@
 // Return NO to only recognize single tap on annotation
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer*)gestureRecognizer
 {
-	return [self t_gestureRecognizerShouldBegin:gestureRecognizer];
+    return [self t_gestureRecognizerShouldBegin:gestureRecognizer];
 }
 
 #pragma mark - JCTiledScrollView
-
-- (CGFloat)zoomScale
-{
-    return _scrollView.zoomScale;
-}
-
-- (void)setZoomScale:(CGFloat)zoomScale
-{
-    [self setZoomScale:zoomScale animated:NO];
-}
-
-- (void)setZoomScale:(CGFloat)zoomScale animated:(BOOL)animated
-{
-    [_scrollView setZoomScale:zoomScale animated:animated];
-}
 
 - (void)setLevelsOfZoom:(size_t)levelsOfZoom
 {
@@ -319,20 +304,7 @@
 
 - (void)setContentCenter:(CGPoint)center animated:(BOOL)animated
 {
-    CGPoint new_contentOffset = _scrollView.contentOffset;
-
-    if (_scrollView.contentSize.width > _scrollView.bounds.size.width) {
-        new_contentOffset.x = MAX(0.0f, (center.x * _scrollView.zoomScale) - (_scrollView.bounds.size.width / 2.0f));
-        new_contentOffset.x = MIN(new_contentOffset.x,
-                                  (_scrollView.contentSize.width - _scrollView.bounds.size.width));
-    }
-
-    if (_scrollView.contentSize.height > _scrollView.bounds.size.height) {
-        new_contentOffset.y = MAX(0.0f, (center.y * _scrollView.zoomScale) - (_scrollView.bounds.size.height / 2.0f));
-        new_contentOffset.y = MIN(new_contentOffset.y,
-                                  (_scrollView.contentSize.height - _scrollView.bounds.size.height));
-    }
-    [_scrollView setContentOffset:new_contentOffset animated:animated];
+	[self t_setContentCenter:center animated:animated];
 }
 
 #pragma mark - JCTileSource
@@ -342,55 +314,10 @@
                column:(NSInteger)column
                 scale:(NSInteger)scale
 {
-    return [self.dataSource tiledScrollView:self
-                                imageForRow:row
-                                     column:column
-                                      scale:scale];
-}
-
-#pragma mark - Annotation Recycling
-
-- (JCAnnotationView*)dequeueReusableAnnotationViewWithReuseIdentifier:
-                         (NSString*)reuseIdentifier
-{
-    return [self t_dequeueReusableAnnotationViewWithReuseIdentifier:reuseIdentifier];
-}
-
-#pragma mark - Annotations
-
-- (BOOL)point:(CGPoint)point isWithinBounds:(CGRect)bounds
-{
-	return [self t_point:point isWithinBounds:bounds];
-}
-
-- (void)refreshAnnotations
-{
-	[self t_refreshAnnotations];
-}
-
-- (void)addAnnotation:(id<JCAnnotation>)annotation
-{
-	[self t_addAnnotation:annotation];
-}
-
-- (void)addAnnotations:(NSArray*)annotations
-{
-	[self t_addAnnotations:annotations];
-}
-
-- (void)removeAnnotation:(id<JCAnnotation>)annotation
-{
-	[self t_removeAnnotation:annotation];
-}
-
-- (void)removeAnnotations:(NSArray*)annotations
-{
-	[self t_removeAnnotations:annotations];
-}
-
-- (void)removeAllAnnotations
-{
-    [self t_removeAllAnnotations];
+    return [self t_tiledView:tiledView
+                 imageForRow:row
+                      column:column
+                       scale:scale];
 }
 
 @end

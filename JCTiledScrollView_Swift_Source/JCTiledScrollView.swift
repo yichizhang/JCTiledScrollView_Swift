@@ -12,8 +12,16 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 
 extension JCTiledScrollView{
 	
-	// MARK: Gesture Support
+	var zoomScale:CGFloat {
+		set {
+			self.setZoomScale(newValue, animated: false)
+		}
+		get {
+			return scrollView.zoomScale
+		}
+	}
 	
+	// MARK: -
 	func makeMuteAnnotationUpdatesTrueFor(time:NSTimeInterval){
 		
 		self.muteAnnotationUpdates = true
@@ -24,6 +32,8 @@ extension JCTiledScrollView{
 			self.muteAnnotationUpdates = false
 		})
 	}
+	
+	// MARK: Gesture Support
 	
 	func t_viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
 		return self.tiledView
@@ -124,6 +134,20 @@ extension JCTiledScrollView{
 		return position
 	}
 	
+	// MARK: JCTiledScrollView
+	func setZoomScale(zoomScale:CGFloat, animated:Bool) {
+		scrollView.setZoomScale(zoomScale, animated: animated)
+	}
+	
+	func t_setContentCenter(center:CGPoint, animated:Bool) {
+		scrollView.jc_setContentCenter(center, animated: animated)
+	}
+	
+	// MARK: JCTileSource
+	func t_tiledView(tiledView:JCTiledView, imageForRow row:Int, column:Int, scale:Int) -> UIImage{
+		return self.dataSource.tiledScrollView(self, imageForRow: row, column: column, scale: scale)
+	}
+	
 	// MARK: UIGestureRecognizerDelegate
 	
 	/** Catch our own tap gesture if it is on an annotation view to set annotation. Return NO to only recognize single tap on annotation
@@ -149,7 +173,7 @@ extension JCTiledScrollView{
 	
 	// MARK: Annotation Recycling
 	
-	func t_dequeueReusableAnnotationViewWithReuseIdentifier(reuseIdentifier:String) -> JCAnnotationView? {
+	func dequeueReusableAnnotationViewWithReuseIdentifier(reuseIdentifier:String) -> JCAnnotationView? {
 		var viewToReturn:JCAnnotationView? = nil
 		
 		for obj in self.recycledAnnotationViews {
@@ -170,11 +194,11 @@ extension JCTiledScrollView{
 	
 	// MARK: Annotations
 	
-	func t_point(point:CGPoint, isWithinBounds bounds:CGRect) -> Bool{
+	func point(point:CGPoint, isWithinBounds bounds:CGRect) -> Bool{
 		return CGRectContainsPoint(CGRectInset(bounds, -25.0, -25.0), point)
 	}
 	
-	func t_refreshAnnotations(){
+	func refreshAnnotations(){
 		self.correctScreenPositionOfAnnotations()
 		
 		for obj in self.annotations{
@@ -187,7 +211,7 @@ extension JCTiledScrollView{
 		}
 	}
 	
-	func t_addAnnotation(annotation:JCAnnotation){
+	func addAnnotation(annotation:JCAnnotation){
 		self.annotations.addObject(annotation)
 		
 		let screenPosition = self.screenPositionForAnnotation(annotation)
@@ -204,13 +228,13 @@ extension JCTiledScrollView{
 		}
 	}
 	
-	func t_addAnnotations(annotations:Array<JCAnnotation>){
+	func addAnnotations(annotations:NSArray){
 		for annotation in annotations {
-			self.addAnnotation(annotation)
+			self.addAnnotation(annotation as JCAnnotation)
 		}
 	}
 	
-	func t_removeAnnotation(annotation:JCAnnotation){
+	func removeAnnotation(annotation:JCAnnotation){
 		if self.annotations.containsObject(annotation) {
 			
 			if let t = self.visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation) {
@@ -223,13 +247,13 @@ extension JCTiledScrollView{
 		}
 	}
 	
-	func t_removeAnnotations(annotations:Array<JCAnnotation>){
+	func removeAnnotations(annotations:NSArray){
 		for annotation in annotations {
-			self.removeAnnotation(annotation)
+			self.removeAnnotation(annotation as JCAnnotation)
 		}
 	}
 	
-	func t_removeAllAnnotations(){
+	func removeAllAnnotations(){
 		self.removeAnnotations(self.annotations.allObjects)
 	}
 	
