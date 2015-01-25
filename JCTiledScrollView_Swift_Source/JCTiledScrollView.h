@@ -68,7 +68,6 @@
 @property (nonatomic, strong) NSMutableSet *visibleAnnotations;
 - (void)correctScreenPositionOfAnnotations;
 - (BOOL)point:(CGPoint)point isWithinBounds:(CGRect)bounds;
-@property (nonatomic, assign) BOOL muteAnnotationUpdates;
 
 - (CGPoint)screenPositionForAnnotation:(id<JCAnnotation>)annotation;
 ////
@@ -82,8 +81,9 @@
 @property (nonatomic, strong) UIScrollView* scrollView;
 @property (nonatomic, strong) UIView* canvasView;
 
-@property (nonatomic, assign) size_t levelsOfZoom;
-@property (nonatomic, assign) size_t levelsOfDetail;
+@property (nonatomic, assign) size_t t__levelsOfZoom;
+@property (nonatomic, assign) size_t t__levelsOfDetail;
+@property (nonatomic, assign) BOOL t__muteAnnotationUpdates;
 
 //Default gesture behvaiour
 @property (nonatomic, assign) BOOL centerSingleTap;

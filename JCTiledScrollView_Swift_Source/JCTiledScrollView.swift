@@ -11,7 +11,29 @@ import Foundation
 let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 
 extension JCTiledScrollView{
-	
+	var levelsOfZoom:UInt{
+		set {
+			t__levelsOfZoom = newValue
+			
+			self.scrollView.maximumZoomScale = pow( 2.0, max(0.0, CGFloat(levelsOfZoom)) )
+		}
+		get {
+			return t__levelsOfZoom
+		}
+	}
+	var levelsOfDetail:UInt{
+		set {
+			t__levelsOfDetail = newValue
+			
+			if levelsOfDetail == 1 {
+				println("Note: Setting levelsOfDetail to 1 causes strange behaviour")
+			}
+			self.tiledView.numberOfZoomLevels = levelsOfDetail
+		}
+		get {
+			return t__levelsOfDetail
+		}
+	}
 	var zoomScale:CGFloat {
 		set {
 			self.setZoomScale(newValue, animated: false)
@@ -20,8 +42,23 @@ extension JCTiledScrollView{
 			return scrollView.zoomScale
 		}
 	}
+	var muteAnnotationUpdates:Bool {
+		set {
+			
+			// FIXME: Jesse C - I don't like overloading this here, but the logic is in one place
+			t__muteAnnotationUpdates = newValue
+			
+			self.userInteractionEnabled = !self.muteAnnotationUpdates
+			if !self.muteAnnotationUpdates {
+				self.correctScreenPositionOfAnnotations()
+			}
+		}
+		get {
+			return t__muteAnnotationUpdates
+		}
+	}
 	
-	// MARK: -
+	// MARK: - Mute Annotation Updates
 	func makeMuteAnnotationUpdatesTrueFor(time:NSTimeInterval){
 		
 		self.muteAnnotationUpdates = true

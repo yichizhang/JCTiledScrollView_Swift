@@ -119,7 +119,7 @@
         _previousSelectedAnnotationTuple = nil;
         _currentSelectedAnnotationTuple = nil;
 
-        _muteAnnotationUpdates = NO;
+        self.muteAnnotationUpdates = NO;
     }
     return self;
 }
@@ -139,20 +139,6 @@
 - (void)scrollViewDidScroll:(__unused UIScrollView*)scrollView
 {
     [self t_scrollViewDidScroll:scrollView];
-}
-
-#pragma mark -
-
-// FIXME: Jesse C - I don't like overloading this here, but the logic is in one
-// place
-- (void)setMuteAnnotationUpdates:(BOOL)muteAnnotationUpdates
-{
-    _muteAnnotationUpdates = muteAnnotationUpdates;
-    _scrollView.userInteractionEnabled = !_muteAnnotationUpdates;
-
-    if (!muteAnnotationUpdates) {
-        [self correctScreenPositionOfAnnotations];
-    }
 }
 
 #pragma mark - Gesture Support
@@ -182,7 +168,7 @@
     [CATransaction begin];
     [CATransaction setAnimationDuration:0.0];
 
-    if ((_scrollView.isZoomBouncing || _muteAnnotationUpdates) && !_scrollView.isZooming) {
+    if ((_scrollView.isZoomBouncing || self.muteAnnotationUpdates) && !_scrollView.isZooming) {
         for (JCVisibleAnnotationTuple* t in _visibleAnnotations) {
             t.view.position = [self screenPositionForAnnotation:t.annotation];
         }
@@ -286,21 +272,6 @@
 }
 
 #pragma mark - JCTiledScrollView
-
-- (void)setLevelsOfZoom:(size_t)levelsOfZoom
-{
-    _levelsOfZoom = levelsOfZoom;
-    _scrollView.maximumZoomScale = (float)powf(2.0f, MAX(0.0f, levelsOfZoom));
-}
-
-- (void)setLevelsOfDetail:(size_t)levelsOfDetail
-{
-    if (levelsOfDetail == 1)
-        NSLog(@"Note: Setting levelsOfDetail to 1 causes strange behaviour");
-
-    _levelsOfDetail = levelsOfDetail;
-    [self.tiledView setNumberOfZoomLevels:levelsOfDetail];
-}
 
 - (void)setContentCenter:(CGPoint)center animated:(BOOL)animated
 {
