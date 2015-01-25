@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Yichi Zhang. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 
@@ -143,7 +143,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		addSubview(scrollView)
 		addSubview(canvasView)
 		
-		singleTapGestureRecognizer = ADAnnotationTapGestureRecognizer(target: self, action: "singleTapReceived:")
+		singleTapGestureRecognizer = JCAnnotationTapGestureRecognizer(target: self, action: "singleTapReceived:")
 		singleTapGestureRecognizer.numberOfTapsRequired = 1
 		singleTapGestureRecognizer.delegate = self
 		tiledView.addGestureRecognizer(singleTapGestureRecognizer)
@@ -390,9 +390,9 @@ extension JCTiledScrollView : UIGestureRecognizerDelegate{
 	
 	func singleTapReceived(gestureRecognizer:UITapGestureRecognizer) {
 		
-		if gestureRecognizer.isKindOfClass(ADAnnotationTapGestureRecognizer.self) {
+		if gestureRecognizer.isKindOfClass(JCAnnotationTapGestureRecognizer.self) {
 			
-			let annotationGestureRecognizer = gestureRecognizer as ADAnnotationTapGestureRecognizer
+			let annotationGestureRecognizer = gestureRecognizer as JCAnnotationTapGestureRecognizer
 			
 			previousSelectedAnnotationTuple = currentSelectedAnnotationTuple
 			currentSelectedAnnotationTuple = annotationGestureRecognizer.tapAnnotation
@@ -416,11 +416,13 @@ extension JCTiledScrollView : UIGestureRecognizerDelegate{
 					self.tiledScrollViewDelegate?.tiledScrollView?(self, didDeselectAnnotationView: oldSelectedAnnotationView)
 				}
 				if currentSelectedAnnotationTuple != nil {
-					var currentSelectedAnnotationView = annotationGestureRecognizer.tapAnnotation.view
-					self.tiledScrollViewDelegate?.tiledScrollView?(self, didSelectAnnotationView: currentSelectedAnnotationView)
+					if let tapAnnotation = annotationGestureRecognizer.tapAnnotation {
+						var currentSelectedAnnotationView = tapAnnotation.view
+						self.tiledScrollViewDelegate?.tiledScrollView?(self, didSelectAnnotationView: currentSelectedAnnotationView)
+					}
 				}
 			} // if nil == annotationGestureRecognizer.tapAnnotation
-		} //  if gestureRecognizer.isKindOfClass(ADAnnotationTapGestureRecognizer.self)
+		} //  if gestureRecognizer.isKindOfClass(JCAnnotationTapGestureRecognizer.self)
 	} // end of singleTapReceived(gestureRecognizer:UITapGestureRecognizer)
 	
 	func doubleTapReceived(gestureRecognizer:UITapGestureRecognizer) {
@@ -472,13 +474,13 @@ extension JCTiledScrollView : UIGestureRecognizerDelegate{
 		
 		let location = gestureRecognizer.locationInView(self.canvasView)
 		
-		(gestureRecognizer as? ADAnnotationTapGestureRecognizer)?.tapAnnotation = nil
+		(gestureRecognizer as? JCAnnotationTapGestureRecognizer)?.tapAnnotation = nil
 		
 		for obj in self.visibleAnnotations{
 			let t = obj as JCVisibleAnnotationTuple
 			if CGRectContainsPoint(t.view.frame, location){
 				
-				(gestureRecognizer as? ADAnnotationTapGestureRecognizer)?.tapAnnotation = t
+				(gestureRecognizer as? JCAnnotationTapGestureRecognizer)?.tapAnnotation = t
 				return true
 			}
 		}

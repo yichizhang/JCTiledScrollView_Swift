@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Yichi Zhang. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension UIScrollView {
 	

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Yichi Zhang. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 @objc protocol JCPDFTiledViewDelegate{
 	func pdfPageForTiledView(tiledView: JCPDFTiledView!) -> CGPDFPage?
