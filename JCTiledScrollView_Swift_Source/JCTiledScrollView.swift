@@ -12,7 +12,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 
 @objc protocol JCTiledScrollViewDelegate: NSObjectProtocol {
 	
-	func tiledScrollView(scrollView:JCTiledScrollView!, viewForAnnotation annotation:JCAnnotation!) -> JCAnnotationView
+	func tiledScrollView(scrollView:JCTiledScrollView!, viewForAnnotation annotation:JCAnnotation!) -> JCAnnotationView!
 	
 	optional func tiledScrollViewDidZoom(scrollView:JCTiledScrollView) -> ()
 	optional func tiledScrollViewDidScroll(scrollView:JCTiledScrollView) -> ()
@@ -31,7 +31,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 }
 
 @objc protocol JCTileSource: NSObjectProtocol {
-	func tiledScrollView(scrollView:JCTiledScrollView, imageForRow row:Int, column:Int, scale:Int) -> UIImage
+	func tiledScrollView(scrollView:JCTiledScrollView, imageForRow row:Int, column:Int, scale:Int) -> UIImage!
 }
 
 @objc class JCTiledScrollView : UIView{

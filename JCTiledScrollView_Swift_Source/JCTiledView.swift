@@ -14,7 +14,7 @@ import QuartzCore
 }
 
 @objc protocol JCTiledBitmapViewDelegate: JCTiledViewDelegate {
-	func tiledView(tiledView:JCTiledView, imageForRow row:Int, column:Int, scale:Int) -> UIImage
+	func tiledView(tiledView:JCTiledView, imageForRow row:Int, column:Int, scale:Int) -> UIImage!
 }
 
 class JCTiledView: UIView {
