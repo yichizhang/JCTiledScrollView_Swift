@@ -289,17 +289,10 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		self.removeAnnotations(self.annotations.allObjects)
 	}
 	
-/*
-	func (){
-		
-	}
-*/
-	
 }
 
+// MARK: - UIScrollViewDelegate
 extension JCTiledScrollView : UIScrollViewDelegate {
-	
-	// MARK: UIScrolViewDelegate
 	
 	func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
 		return self.tiledView
@@ -316,20 +309,18 @@ extension JCTiledScrollView : UIScrollViewDelegate {
 	}
 }
 
+// MARK: - JCTiledBitmapViewDelegate
 extension JCTiledScrollView : JCTiledBitmapViewDelegate {
 	
-	
-	// MARK: JCTileSource
 	func tiledView(tiledView:JCTiledView, imageForRow row:Int, column:Int, scale:Int) -> UIImage{
 		return self.dataSource!.tiledScrollView(self, imageForRow: row, column: column, scale: scale)
 	}
-	
 
 }
 
+// MARK: - UIGestureRecognizerDelegate
 extension JCTiledScrollView : UIGestureRecognizerDelegate{
 	
-	// MARK: Gesture Support
 	func singleTapReceived(gestureRecognizer:UITapGestureRecognizer) {
 		
 		if gestureRecognizer.isKindOfClass(ADAnnotationTapGestureRecognizer.self) {
@@ -407,9 +398,6 @@ extension JCTiledScrollView : UIGestureRecognizerDelegate{
 		
 		self.tiledScrollViewDelegate?.tiledScrollView?(self, didReceiveTwoFingerTap: gestureRecognizer)
 	}
-	
-	
-	// MARK: UIGestureRecognizerDelegate
 	
 	/** Catch our own tap gesture if it is on an annotation view to set annotation. Return NO to only recognize single tap on annotation
 	*/
