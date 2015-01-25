@@ -172,7 +172,78 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	// MARK: Position
 	/*private*/ func correctScreenPositionOfAnnotations(){
 
-		JCTiledScrollView_objc.o_correctScreenPositionOfAnnotations(self)
+		CATransaction.begin()
+		CATransaction.setAnimationDuration(0.0)
+		
+		if (scrollView.zoomBouncing || muteAnnotationUpdates) && !scrollView.zooming {
+			for obj in visibleAnnotations {
+				let t = obj as JCVisibleAnnotationTuple
+				t.view.position = screenPositionForAnnotation(t.annotation)
+			}
+		} else {
+			for obj in annotations {
+				let annotation = obj as JCAnnotation
+				let screenPosition = screenPositionForAnnotation(annotation)
+				var t = visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation)
+				
+				if screenPosition.jc_isWithinBounds(bounds) {
+					if let t = t {
+						if t == currentSelectedAnnotationTuple {
+							canvasView.addSubview(t.view)
+						}
+						t.view.position = screenPosition
+					} else {
+						// t is nil
+						let view = tiledScrollViewDelegate?.tiledScrollView(self, viewForAnnotation: annotation)
+						
+						if let view = view {
+							view.position = screenPosition
+							
+							t = JCVisibleAnnotationTuple(annotation: annotation, view: view)
+							
+							if let t = t {
+								tiledScrollViewDelegate?.tiledScrollView?(self, annotationWillAppear: t.annotation)
+								
+								visibleAnnotations.addObject(t)
+								canvasView.addSubview(t.view)
+								
+								CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
+								let animation = CABasicAnimation(keyPath: "opacity")
+								animation.duration = 0.3
+								animation.repeatCount = 1
+								animation.fromValue = 0.0
+								animation.toValue = 1.0
+								t.view.layer.addAnimation(animation, forKey: "animateOpacity")
+								
+								tiledScrollViewDelegate?.tiledScrollView?(self, annotationDidAppear: t.annotation)
+							}
+							
+						} else {
+							// view is nil
+							continue
+						}
+					}
+				} else {
+					if let t = t {
+						tiledScrollViewDelegate?.tiledScrollView?(self, annotationWillAppear: t.annotation)
+						
+						if t != currentSelectedAnnotationTuple {
+							t.view.removeFromSuperview()
+							recycledAnnotationViews.addObject(t.view)
+							visibleAnnotations.removeObject(t)
+						}
+						else {
+							// FIXME: Anthony D - I don't like let the view in visible annotations array, but the logic is in one place
+							t.view.removeFromSuperview()
+						}
+						
+						tiledScrollViewDelegate?.tiledScrollView?(self, annotationDidDisappear: t.annotation)
+					}
+				} // if screenPosition.jc_isWithinBounds(bounds)
+			} // for obj in annotations
+		}// if (scrollView.zoomBouncing || muteAnnotationUpdates) && !scrollView.zooming
+		
+		CATransaction.commit()
 	}
 	
 	/*private*/ func screenPositionForAnnotation(annotation: JCAnnotation) -> CGPoint{
@@ -180,10 +251,6 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		position.x = (annotation.contentPosition.x * self.zoomScale) - scrollView.contentOffset.x
 		position.y = (annotation.contentPosition.y * self.zoomScale) - scrollView.contentOffset.y
 		return position
-	}
-	
-	/*private*/ func point(point:CGPoint, isWithinBounds bounds:CGRect) -> Bool{
-		return CGRectContainsPoint(CGRectInset(bounds, -25.0, -25.0), point)
 	}
 	
 	// MARK: Mute Annotation Updates
@@ -248,7 +315,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		
 		let screenPosition = self.screenPositionForAnnotation(annotation)
 		
-		if self.point(screenPosition, isWithinBounds: self.bounds) {
+		if screenPosition.jc_isWithinBounds(bounds) {
 			
 			let view = self.tiledScrollViewDelegate!.tiledScrollView(self, viewForAnnotation: annotation)
 			view.position = screenPosition

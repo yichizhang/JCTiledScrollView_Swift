@@ -27,13 +27,12 @@
 //  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 @class JCTiledScrollView;
 
 @interface JCTiledScrollView_objc : NSObject
 
 + (id)tiledViewFromClass:(Class)class frame:(CGRect)frame;
-+ (void)o_correctScreenPositionOfAnnotations:(JCTiledScrollView*)theScrollView;
 
 @end
