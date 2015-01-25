@@ -9,20 +9,6 @@
 
 import UIKit
 
-@objc protocol JCAnnotation : NSObjectProtocol {
-	
-	var contentPosition:CGPoint {get set}
-	
-}
-
-class JCAnnotationTapGestureRecognizer: UITapGestureRecognizer {
-	var tapAnnotation:JCVisibleAnnotationTuple?
-	
-	override init(target: AnyObject, action: Selector) {
-		super.init(target: target, action: action)
-	}
-}
-
 @objc class JCAnnotationView: UIView {
 	
 	private var _position:CGPoint = CGPointZero
