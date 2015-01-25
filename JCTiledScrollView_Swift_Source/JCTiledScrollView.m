@@ -40,150 +40,96 @@
 
 #define kStandardUIScrollViewAnimationTime (int64_t)0.10
 
-@interface JCTiledScrollView () <JCTiledBitmapViewDelegate,
-                                 UIGestureRecognizerDelegate>
+@implementation TEMP_OBJ
 
-@property (nonatomic, strong) UITapGestureRecognizer* singleTapGestureRecognizer;
-@property (nonatomic, strong) UITapGestureRecognizer* doubleTapGestureRecognizer;
-@property (nonatomic, strong)
-    UITapGestureRecognizer* twoFingerTapGestureRecognizer;
-@end
-
-@implementation JCTiledScrollView
-
-+ (Class)tiledLayerClass
++  (void)o_initScrollView:(JCTiledScrollView*)theScrollView frame:(CGRect)frame contentSize:(CGSize)contentSize
 {
-    return [JCTiledView class];
+	theScrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+
+	theScrollView.scrollView = [[UIScrollView alloc] initWithFrame:theScrollView.bounds];
+	theScrollView.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	theScrollView.scrollView.delegate = theScrollView;
+	theScrollView.scrollView.backgroundColor = [UIColor whiteColor];
+	theScrollView.scrollView.contentSize = contentSize;
+	theScrollView.scrollView.bouncesZoom = YES;
+	theScrollView.scrollView.bounces = YES;
+	theScrollView.scrollView.minimumZoomScale = 1.0;
+
+	theScrollView.levelsOfZoom = 2;
+
+	theScrollView.zoomsInOnDoubleTap = YES;
+	theScrollView.zoomsOutOnTwoFingerTap = YES;
+	theScrollView.centerSingleTap = YES;
+
+	CGRect canvasFrame = CGRectMake(0.0f, 0.0f, theScrollView.scrollView.contentSize.width,
+									 theScrollView.scrollView.contentSize.height);
+	theScrollView.canvasView = [[UIView alloc] initWithFrame:canvasFrame];
+	theScrollView.canvasView.userInteractionEnabled = NO;
+
+	theScrollView.tiledView =
+		[[[[theScrollView class] tiledLayerClass] alloc] initWithFrame:canvasFrame];
+	theScrollView.tiledView.delegate = theScrollView;
+
+	[theScrollView.scrollView addSubview:theScrollView.tiledView];
+
+	[theScrollView addSubview:theScrollView.scrollView];
+	[theScrollView addSubview:theScrollView.canvasView];
+
+	theScrollView.singleTapGestureRecognizer = [[ADAnnotationTapGestureRecognizer alloc]
+		initWithTarget:theScrollView
+				action:@selector(singleTapReceived:)];
+	theScrollView.singleTapGestureRecognizer.numberOfTapsRequired = 1;
+	theScrollView.singleTapGestureRecognizer.delegate = theScrollView;
+	[theScrollView.tiledView addGestureRecognizer:theScrollView.singleTapGestureRecognizer];
+
+	theScrollView.doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc]
+		initWithTarget:theScrollView
+				action:@selector(doubleTapReceived:)];
+	theScrollView.doubleTapGestureRecognizer.numberOfTapsRequired = 2;
+	[theScrollView.tiledView addGestureRecognizer:theScrollView.doubleTapGestureRecognizer];
+
+	[theScrollView.singleTapGestureRecognizer
+		requireGestureRecognizerToFail:theScrollView.doubleTapGestureRecognizer];
+
+	theScrollView.twoFingerTapGestureRecognizer = [[UITapGestureRecognizer alloc]
+		initWithTarget:theScrollView
+				action:@selector(twoFingerTapReceived:)];
+	theScrollView.twoFingerTapGestureRecognizer.numberOfTouchesRequired = 2;
+	theScrollView.twoFingerTapGestureRecognizer.numberOfTapsRequired = 1;
+	[theScrollView.tiledView addGestureRecognizer:theScrollView.twoFingerTapGestureRecognizer];
+
+	theScrollView.annotations = [[NSMutableSet alloc] init];
+	theScrollView.visibleAnnotations = [[NSMutableSet alloc] init];
+	theScrollView.recycledAnnotationViews = [[NSMutableSet alloc] init];
+	theScrollView.previousSelectedAnnotationTuple = nil;
+	theScrollView.currentSelectedAnnotationTuple = nil;
+
+	theScrollView.muteAnnotationUpdates = NO;
 }
 
-- (id)initWithFrame:(CGRect)frame contentSize:(CGSize)contentSize
-{
-    if ((self = [super initWithFrame:frame])) {
-        self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+#pragma mark -
 
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-        _scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        _scrollView.delegate = self;
-        _scrollView.backgroundColor = [UIColor whiteColor];
-        _scrollView.contentSize = contentSize;
-        _scrollView.bouncesZoom = YES;
-        _scrollView.bounces = YES;
-        _scrollView.minimumZoomScale = 1.0;
-
-        self.levelsOfZoom = 2;
-
-        self.zoomsInOnDoubleTap = YES;
-        self.zoomsOutOnTwoFingerTap = YES;
-        self.centerSingleTap = YES;
-
-        CGRect canvas_frame = CGRectMake(0.0f, 0.0f, _scrollView.contentSize.width,
-                                         _scrollView.contentSize.height);
-        _canvasView = [[UIView alloc] initWithFrame:canvas_frame];
-        _canvasView.userInteractionEnabled = NO;
-
-        _tiledView =
-            [[[[self class] tiledLayerClass] alloc] initWithFrame:canvas_frame];
-        _tiledView.delegate = self;
-
-        [_scrollView addSubview:self.tiledView];
-
-        [self addSubview:_scrollView];
-        [self addSubview:_canvasView];
-
-        _singleTapGestureRecognizer = [[ADAnnotationTapGestureRecognizer alloc]
-            initWithTarget:self
-                    action:@selector(singleTapReceived:)];
-        _singleTapGestureRecognizer.numberOfTapsRequired = 1;
-        _singleTapGestureRecognizer.delegate = self;
-        [_tiledView addGestureRecognizer:_singleTapGestureRecognizer];
-
-        _doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc]
-            initWithTarget:self
-                    action:@selector(doubleTapReceived:)];
-        _doubleTapGestureRecognizer.numberOfTapsRequired = 2;
-        [_tiledView addGestureRecognizer:_doubleTapGestureRecognizer];
-
-        [_singleTapGestureRecognizer
-            requireGestureRecognizerToFail:_doubleTapGestureRecognizer];
-
-        _twoFingerTapGestureRecognizer = [[UITapGestureRecognizer alloc]
-            initWithTarget:self
-                    action:@selector(twoFingerTapReceived:)];
-        _twoFingerTapGestureRecognizer.numberOfTouchesRequired = 2;
-        _twoFingerTapGestureRecognizer.numberOfTapsRequired = 1;
-        [_tiledView addGestureRecognizer:_twoFingerTapGestureRecognizer];
-
-        _annotations = [[NSMutableSet alloc] init];
-        _visibleAnnotations = [[NSMutableSet alloc] init];
-        _recycledAnnotationViews = [[NSMutableSet alloc] init];
-        _previousSelectedAnnotationTuple = nil;
-        _currentSelectedAnnotationTuple = nil;
-
-        self.muteAnnotationUpdates = NO;
-    }
-    return self;
-}
-
-#pragma mark - UIScrolViewDelegate
-
-- (UIView*)viewForZoomingInScrollView:(__unused UIScrollView*)scrollView
-{
-    return [self t_viewForZoomingInScrollView:scrollView];
-}
-
-- (void)scrollViewDidZoom:(__unused UIScrollView*)scrollView
-{
-    [self t_scrollViewDidZoom:scrollView];
-}
-
-- (void)scrollViewDidScroll:(__unused UIScrollView*)scrollView
-{
-    [self t_scrollViewDidScroll:scrollView];
-}
-
-#pragma mark - Gesture Support
-
-- (void)singleTapReceived:(UITapGestureRecognizer*)gestureRecognizer
-{
-    [self t_singleTapReceived:gestureRecognizer];
-}
-
-- (void)doubleTapReceived:(UITapGestureRecognizer*)gestureRecognizer
-{
-    [self t_doubleTapReceived:gestureRecognizer];
-}
-
-- (void)twoFingerTapReceived:(UITapGestureRecognizer*)gestureRecognizer
-{
-    [self t_twoFingerTapReceived:gestureRecognizer];
-}
-
-- (CGPoint)screenPositionForAnnotation:(id<JCAnnotation>)annotation
-{
-    return [self t_screenPositionForAnnotation:annotation];
-}
-
-- (void)correctScreenPositionOfAnnotations
++ (void)o_correctScreenPositionOfAnnotations:(JCTiledScrollView*)theScrollView
 {
     [CATransaction begin];
     [CATransaction setAnimationDuration:0.0];
 
-    if ((_scrollView.isZoomBouncing || self.muteAnnotationUpdates) && !_scrollView.isZooming) {
-        for (JCVisibleAnnotationTuple* t in _visibleAnnotations) {
-            t.view.position = [self screenPositionForAnnotation:t.annotation];
+    if ((theScrollView.scrollView.isZoomBouncing || theScrollView.muteAnnotationUpdates) && !theScrollView.scrollView.isZooming) {
+        for (JCVisibleAnnotationTuple* t in theScrollView.visibleAnnotations) {
+            t.view.position = [theScrollView screenPositionForAnnotation:t.annotation];
         }
     }
     else {
-        for (id<JCAnnotation> annotation in _annotations) {
+        for (id<JCAnnotation> annotation in theScrollView.annotations) {
 
-            CGPoint screenPosition = [self screenPositionForAnnotation:annotation];
+            CGPoint screenPosition = [theScrollView screenPositionForAnnotation:annotation];
             JCVisibleAnnotationTuple* t =
-                [_visibleAnnotations visibleAnnotationTupleForAnnotation:annotation];
+                [theScrollView.visibleAnnotations visibleAnnotationTupleForAnnotation:annotation];
 
-            if ([self point:screenPosition isWithinBounds:self.bounds]) {
+            if ([theScrollView point:screenPosition isWithinBounds:theScrollView.bounds]) {
                 if (nil == t) {
                     JCAnnotationView* view =
-                        [_tiledScrollViewDelegate tiledScrollView:self
+                        [theScrollView.tiledScrollViewDelegate tiledScrollView:theScrollView
                                                 viewForAnnotation:annotation];
 
                     if (nil == view)
@@ -192,16 +138,16 @@
 
                     t = [JCVisibleAnnotationTuple instanceWithAnnotation:annotation
                                                                     view:view];
-                    if ([self.tiledScrollViewDelegate
+                    if ([theScrollView.tiledScrollViewDelegate
                             respondsToSelector:@selector(tiledScrollView:
                                                     annotationWillAppear:)]) {
-                        [self.tiledScrollViewDelegate tiledScrollView:self
+                        [theScrollView.tiledScrollViewDelegate tiledScrollView:theScrollView
                                                  annotationWillAppear:t.annotation];
                     }
 
                     if (t) {
-                        [_visibleAnnotations addObject:t];
-                        [_canvasView addSubview:t.view];
+                        [theScrollView.visibleAnnotations addObject:t];
+                        [theScrollView.canvasView addSubview:t.view];
                     }
 
                     [CATransaction setValue:(id)kCFBooleanTrue
@@ -214,35 +160,35 @@
                     theAnimation.toValue = [NSNumber numberWithFloat:1.0];
                     [t.view.layer addAnimation:theAnimation forKey:@"animateOpacity"];
 
-                    if ([self.tiledScrollViewDelegate
+                    if ([theScrollView.tiledScrollViewDelegate
                             respondsToSelector:@selector(tiledScrollView:
                                                      annotationDidAppear:)]) {
-                        [self.tiledScrollViewDelegate tiledScrollView:self
+                        [theScrollView.tiledScrollViewDelegate tiledScrollView:theScrollView
                                                   annotationDidAppear:t.annotation];
                     }
                 }
                 else {
-                    if (t == _currentSelectedAnnotationTuple) {
-                        [_canvasView addSubview:t.view];
+                    if (t == theScrollView.currentSelectedAnnotationTuple) {
+                        [theScrollView.canvasView addSubview:t.view];
                     }
                     t.view.position = screenPosition;
                 }
             }
             else {
                 if (nil != t) {
-                    if ([self.tiledScrollViewDelegate
+                    if ([theScrollView.tiledScrollViewDelegate
                             respondsToSelector:@selector(tiledScrollView:
                                                    annotationWillDisappear:)]) {
-                        [self.tiledScrollViewDelegate tiledScrollView:self
+                        [theScrollView.tiledScrollViewDelegate tiledScrollView:theScrollView
                                                  annotationWillAppear:t.annotation];
                     }
 
-                    if (t != _currentSelectedAnnotationTuple) {
+                    if (t != theScrollView.currentSelectedAnnotationTuple) {
                         [t.view removeFromSuperview];
                         if (t.view) {
-                            [_recycledAnnotationViews addObject:t.view];
+                            [theScrollView.recycledAnnotationViews addObject:t.view];
                         }
-                        [_visibleAnnotations removeObject:t];
+                        [theScrollView.visibleAnnotations removeObject:t];
                     }
                     else {
                         // FIXME: Anthony D - I don't like let the view in visible
@@ -250,10 +196,10 @@
                         [t.view removeFromSuperview];
                     }
 
-                    if ([self.tiledScrollViewDelegate
+                    if ([theScrollView.tiledScrollViewDelegate
                             respondsToSelector:@selector(tiledScrollView:
                                                    annotationDidDisappear:)]) {
-                        [self.tiledScrollViewDelegate tiledScrollView:self
+                        [theScrollView.tiledScrollViewDelegate tiledScrollView:theScrollView
                                                annotationDidDisappear:t.annotation];
                     }
                 }
@@ -261,34 +207,6 @@
         }
     }
     [CATransaction commit];
-}
-
-#pragma mark - UIGestureRecognizerDelegate
-// Catch our own tap gesture if it is on an annotation view to set annotation
-// Return NO to only recognize single tap on annotation
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer*)gestureRecognizer
-{
-    return [self t_gestureRecognizerShouldBegin:gestureRecognizer];
-}
-
-#pragma mark - JCTiledScrollView
-
-- (void)setContentCenter:(CGPoint)center animated:(BOOL)animated
-{
-	[self t_setContentCenter:center animated:animated];
-}
-
-#pragma mark - JCTileSource
-
-- (UIImage*)tiledView:(__unused JCTiledView*)tiledView
-          imageForRow:(NSInteger)row
-               column:(NSInteger)column
-                scale:(NSInteger)scale
-{
-    return [self t_tiledView:tiledView
-                 imageForRow:row
-                      column:column
-                       scale:scale];
 }
 
 @end

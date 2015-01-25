@@ -29,72 +29,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class JCTiledScrollView, JCTiledView, JCAnnotationView, JCVisibleAnnotationTuple;
-@protocol JCAnnotation;
+@class JCTiledScrollView;
 
-@protocol JCTileSource <NSObject>
-- (UIImage*)tiledScrollView:(JCTiledScrollView*)scrollView imageForRow:(NSInteger)row column:(NSInteger)column scale:(NSInteger)scale;
-@end
+@interface TEMP_OBJ : NSObject
 
-@protocol JCTiledScrollViewDelegate <NSObject>
-
-- (JCAnnotationView*)tiledScrollView:(JCTiledScrollView*)scrollView viewForAnnotation:(id<JCAnnotation>)annotation;
-
-@optional
-- (void)tiledScrollViewDidZoom:(JCTiledScrollView*)scrollView;
-- (void)tiledScrollViewDidScroll:(JCTiledScrollView*)scrollView;
-
-@optional
-- (void)tiledScrollView:(JCTiledScrollView*)scrollView annotationWillDisappear:(id<JCAnnotation>)annotation;
-- (void)tiledScrollView:(JCTiledScrollView*)scrollView annotationDidDisappear:(id<JCAnnotation>)annotation;
-- (void)tiledScrollView:(JCTiledScrollView*)scrollView annotationWillAppear:(id<JCAnnotation>)annotation;
-- (void)tiledScrollView:(JCTiledScrollView*)scrollView annotationDidAppear:(id<JCAnnotation>)annotation;
-- (void)tiledScrollView:(JCTiledScrollView*)scrollView didSelectAnnotationView:(JCAnnotationView*)view;
-- (void)tiledScrollView:(JCTiledScrollView*)scrollView didDeselectAnnotationView:(JCAnnotationView*)view;
-
-- (void)tiledScrollView:(JCTiledScrollView*)scrollView didReceiveSingleTap:(UIGestureRecognizer*)gestureRecognizer;
-- (void)tiledScrollView:(JCTiledScrollView*)scrollView didReceiveDoubleTap:(UIGestureRecognizer*)gestureRecognizer;
-- (void)tiledScrollView:(JCTiledScrollView*)scrollView didReceiveTwoFingerTap:(UIGestureRecognizer*)gestureRecognizer;
-
-@end
-
-@interface JCTiledScrollView : UIView <UIScrollViewDelegate>
-////
-// Meant to be private but ...
-@property (nonatomic, strong) JCVisibleAnnotationTuple* previousSelectedAnnotationTuple;
-@property (nonatomic, strong) JCVisibleAnnotationTuple* currentSelectedAnnotationTuple;
-@property (nonatomic, strong) NSMutableSet *annotations;
-@property (nonatomic, strong) NSMutableSet *recycledAnnotationViews;
-@property (nonatomic, strong) NSMutableSet *visibleAnnotations;
-- (void)correctScreenPositionOfAnnotations;
-- (BOOL)point:(CGPoint)point isWithinBounds:(CGRect)bounds;
-
-- (CGPoint)screenPositionForAnnotation:(id<JCAnnotation>)annotation;
-////
-
-//Delegates
-@property (nonatomic, weak) id<JCTiledScrollViewDelegate> tiledScrollViewDelegate;
-@property (nonatomic, weak) id<JCTileSource> dataSource;
-
-//internals
-@property (nonatomic, strong) JCTiledView* tiledView;
-@property (nonatomic, strong) UIScrollView* scrollView;
-@property (nonatomic, strong) UIView* canvasView;
-
-@property (nonatomic, assign) size_t t__levelsOfZoom;
-@property (nonatomic, assign) size_t t__levelsOfDetail;
-@property (nonatomic, assign) BOOL t__muteAnnotationUpdates;
-
-//Default gesture behvaiour
-@property (nonatomic, assign) BOOL centerSingleTap;
-@property (nonatomic, assign) BOOL zoomsInOnDoubleTap;
-@property (nonatomic, assign) BOOL zoomsToTouchLocation;
-@property (nonatomic, assign) BOOL zoomsOutOnTwoFingerTap;
-
-+ (Class)tiledLayerClass;
-
-- (id)initWithFrame:(CGRect)frame contentSize:(CGSize)contentSize;
-
-- (void)setContentCenter:(CGPoint)center animated:(BOOL)animated;
++ (void)o_initScrollView:(JCTiledScrollView*)theScrollView frame:(CGRect)frame contentSize:(CGSize)contentSize;
++ (void)o_correctScreenPositionOfAnnotations:(JCTiledScrollView*)theScrollView;
 
 @end
