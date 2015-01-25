@@ -53,7 +53,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	
 	var _levelsOfZoom:UInt!
 	var _levelsOfDetail:UInt!
-	var _muteAnnotationUpdates:Bool!
+	var _muteAnnotationUpdates:Bool = false
 	
 	var levelsOfZoom:UInt{
 		set {
@@ -102,9 +102,9 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		}
 	}
 	
-	/*private*/ var annotations:NSMutableSet!
-	/*private*/ var recycledAnnotationViews:NSMutableSet!
-	/*private*/ var visibleAnnotations:NSMutableSet!
+	/*private*/ var annotations = NSMutableSet()
+	/*private*/ var recycledAnnotationViews = NSMutableSet()
+	/*private*/ var visibleAnnotations = NSMutableSet()
 	/*private*/ var previousSelectedAnnotationTuple:JCVisibleAnnotationTuple?
 	/*private*/ var currentSelectedAnnotationTuple:JCVisibleAnnotationTuple?
 	
@@ -118,7 +118,47 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	init(frame: CGRect, contentSize:CGSize) {
 		super.init(frame: frame)
 		
-		TEMP_OBJ.o_initScrollView(self, frame: frame, contentSize: contentSize)
+		autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+		
+		scrollView = UIScrollView(frame: self.bounds)
+		scrollView.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+		scrollView.delegate = self
+		scrollView.backgroundColor = UIColor.whiteColor()
+		scrollView.contentSize = contentSize
+		scrollView.bouncesZoom = true
+		scrollView.bounces = true
+		scrollView.minimumZoomScale = 1.0
+		
+		levelsOfZoom = 2
+		
+		let canvasFrame = CGRect(origin: CGPointZero, size: scrollView.contentSize)
+		canvasView = UIView(frame: canvasFrame)
+		canvasView.userInteractionEnabled = false
+		
+		tiledView = JCTiledScrollView_objc.tiledViewFromClass(self.dynamicType.tiledLayerClass(), frame: canvasFrame) as JCTiledView
+		tiledView.delegate = self
+		
+		scrollView.addSubview(tiledView)
+		
+		addSubview(scrollView)
+		addSubview(canvasView)
+		
+		singleTapGestureRecognizer = ADAnnotationTapGestureRecognizer(target: self, action: "singleTapReceived:")
+		singleTapGestureRecognizer.numberOfTapsRequired = 1
+		singleTapGestureRecognizer.delegate = self
+		tiledView.addGestureRecognizer(singleTapGestureRecognizer)
+		
+		doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: "doubleTapReceived:")
+		doubleTapGestureRecognizer.numberOfTapsRequired = 2
+		tiledView.addGestureRecognizer(doubleTapGestureRecognizer)
+		
+		singleTapGestureRecognizer.requireGestureRecognizerToFail(doubleTapGestureRecognizer)
+		
+		twoFingerTapGestureRecognizer = UITapGestureRecognizer(target: self, action: "twoFingerTapReceived:")
+		twoFingerTapGestureRecognizer.numberOfTouchesRequired = 2
+		twoFingerTapGestureRecognizer.numberOfTapsRequired = 1
+		tiledView.addGestureRecognizer(twoFingerTapGestureRecognizer)
+		
 	}
 
 	required init(coder aDecoder: NSCoder) {
@@ -132,7 +172,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	// MARK: Position
 	/*private*/ func correctScreenPositionOfAnnotations(){
 
-		TEMP_OBJ.o_correctScreenPositionOfAnnotations(self)
+		JCTiledScrollView_objc.o_correctScreenPositionOfAnnotations(self)
 	}
 	
 	/*private*/ func screenPositionForAnnotation(annotation: JCAnnotation) -> CGPoint{

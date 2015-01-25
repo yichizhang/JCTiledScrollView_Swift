@@ -40,71 +40,10 @@
 
 #define kStandardUIScrollViewAnimationTime (int64_t)0.10
 
-@implementation TEMP_OBJ
+@implementation JCTiledScrollView_objc
 
-+  (void)o_initScrollView:(JCTiledScrollView*)theScrollView frame:(CGRect)frame contentSize:(CGSize)contentSize
-{
-	theScrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-
-	theScrollView.scrollView = [[UIScrollView alloc] initWithFrame:theScrollView.bounds];
-	theScrollView.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-	theScrollView.scrollView.delegate = theScrollView;
-	theScrollView.scrollView.backgroundColor = [UIColor whiteColor];
-	theScrollView.scrollView.contentSize = contentSize;
-	theScrollView.scrollView.bouncesZoom = YES;
-	theScrollView.scrollView.bounces = YES;
-	theScrollView.scrollView.minimumZoomScale = 1.0;
-
-	theScrollView.levelsOfZoom = 2;
-
-	theScrollView.zoomsInOnDoubleTap = YES;
-	theScrollView.zoomsOutOnTwoFingerTap = YES;
-	theScrollView.centerSingleTap = YES;
-
-	CGRect canvasFrame = CGRectMake(0.0f, 0.0f, theScrollView.scrollView.contentSize.width,
-									 theScrollView.scrollView.contentSize.height);
-	theScrollView.canvasView = [[UIView alloc] initWithFrame:canvasFrame];
-	theScrollView.canvasView.userInteractionEnabled = NO;
-
-	theScrollView.tiledView =
-		[[[[theScrollView class] tiledLayerClass] alloc] initWithFrame:canvasFrame];
-	theScrollView.tiledView.delegate = theScrollView;
-
-	[theScrollView.scrollView addSubview:theScrollView.tiledView];
-
-	[theScrollView addSubview:theScrollView.scrollView];
-	[theScrollView addSubview:theScrollView.canvasView];
-
-	theScrollView.singleTapGestureRecognizer = [[ADAnnotationTapGestureRecognizer alloc]
-		initWithTarget:theScrollView
-				action:@selector(singleTapReceived:)];
-	theScrollView.singleTapGestureRecognizer.numberOfTapsRequired = 1;
-	theScrollView.singleTapGestureRecognizer.delegate = theScrollView;
-	[theScrollView.tiledView addGestureRecognizer:theScrollView.singleTapGestureRecognizer];
-
-	theScrollView.doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc]
-		initWithTarget:theScrollView
-				action:@selector(doubleTapReceived:)];
-	theScrollView.doubleTapGestureRecognizer.numberOfTapsRequired = 2;
-	[theScrollView.tiledView addGestureRecognizer:theScrollView.doubleTapGestureRecognizer];
-
-	[theScrollView.singleTapGestureRecognizer
-		requireGestureRecognizerToFail:theScrollView.doubleTapGestureRecognizer];
-
-	theScrollView.twoFingerTapGestureRecognizer = [[UITapGestureRecognizer alloc]
-		initWithTarget:theScrollView
-				action:@selector(twoFingerTapReceived:)];
-	theScrollView.twoFingerTapGestureRecognizer.numberOfTouchesRequired = 2;
-	theScrollView.twoFingerTapGestureRecognizer.numberOfTapsRequired = 1;
-	[theScrollView.tiledView addGestureRecognizer:theScrollView.twoFingerTapGestureRecognizer];
-
-	theScrollView.annotations = [[NSMutableSet alloc] init];
-	theScrollView.visibleAnnotations = [[NSMutableSet alloc] init];
-	theScrollView.recycledAnnotationViews = [[NSMutableSet alloc] init];
-	theScrollView.previousSelectedAnnotationTuple = nil;
-	theScrollView.currentSelectedAnnotationTuple = nil;
-
-	theScrollView.muteAnnotationUpdates = NO;
++ (id)tiledViewFromClass:(Class)class frame:(CGRect)frame{
+	return [[class alloc] initWithFrame:frame];
 }
 
 #pragma mark -

@@ -31,9 +31,9 @@
 
 @class JCTiledScrollView;
 
-@interface TEMP_OBJ : NSObject
+@interface JCTiledScrollView_objc : NSObject
 
-+ (void)o_initScrollView:(JCTiledScrollView*)theScrollView frame:(CGRect)frame contentSize:(CGSize)contentSize;
++ (id)tiledViewFromClass:(Class)class frame:(CGRect)frame;
 + (void)o_correctScreenPositionOfAnnotations:(JCTiledScrollView*)theScrollView;
 
 @end
