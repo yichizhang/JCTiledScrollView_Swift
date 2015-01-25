@@ -1,2 +1,1 @@
-#import "CGPDFDocument.h"
-#import "JCTiledScrollView.h"
+#import "JCTiledScrollView_objc.h"

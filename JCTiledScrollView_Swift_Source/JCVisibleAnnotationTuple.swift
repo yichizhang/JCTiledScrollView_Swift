@@ -12,10 +12,6 @@ class JCVisibleAnnotationTuple: NSObject {
 	var annotation:JCAnnotation!
 	var view:JCAnnotationView!
 	
-	class func instanceWithAnnotation(annotation:JCAnnotation, view:JCAnnotationView) -> JCVisibleAnnotationTuple{
-		return JCVisibleAnnotationTuple(annotation: annotation, view: view)
-	}
-	
 	convenience init(annotation:JCAnnotation, view:JCAnnotationView){
 		self.init()
 		self.annotation = annotation

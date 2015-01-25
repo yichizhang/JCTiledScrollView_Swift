@@ -21,9 +21,9 @@ class JCTiledPDFScrollView: JCTiledScrollView, JCPDFTiledViewDelegate {
 		
 		var contentSize = CGSizeZero
 	
-		if let tempDocument = CGPDFDocumentCreateX(url as CFURLRef, "") {
+		if let tempDocument = JCPDFDocument.createX(url, password: "") {
 
-			self.document = tempDocument.takeRetainedValue()
+			self.document = tempDocument
 			
 			if let tempPage = CGPDFDocumentGetPage(self.document, 1) {
 				
