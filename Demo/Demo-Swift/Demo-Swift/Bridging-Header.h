@@ -9,6 +9,5 @@
 #ifndef Demo_Swift_Bridging_Header_h
 #define Demo_Swift_Bridging_Header_h
 
-#import "JCTiledScrollViewImportAll.h"
 
 #endif

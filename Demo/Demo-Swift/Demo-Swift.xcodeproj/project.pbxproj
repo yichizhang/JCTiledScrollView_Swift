@@ -414,7 +414,6 @@
 		12204C391A752F2100E969D7 /* JCTiledScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12204C291A752F2100E969D7 /* JCTiledScrollView.swift */; };
 		12204C3A1A752F2100E969D7 /* JCTiledLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12204C2A1A752F2100E969D7 /* JCTiledLayer.swift */; };
 		12204C3B1A752F2100E969D7 /* JCTiledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12204C2B1A752F2100E969D7 /* JCTiledView.swift */; };
-		12204C3C1A752F2100E969D7 /* JCTiledScrollView_objc.m in Sources */ = {isa = PBXBuildFile; fileRef = 12204C2C1A752F2100E969D7 /* JCTiledScrollView_objc.m */; };
 		12204C3D1A752F2100E969D7 /* JCPDFDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12204C2E1A752F2100E969D7 /* JCPDFDocument.swift */; };
 		12204C3E1A752F2100E969D7 /* JCTiledPDFScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12204C301A752F2100E969D7 /* JCTiledPDFScrollView.swift */; };
 		12204C3F1A752F2100E969D7 /* CGPoint+JCTiledScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12204C311A752F2100E969D7 /* CGPoint+JCTiledScrollView.swift */; };
@@ -852,17 +851,13 @@
 		12204C291A752F2100E969D7 /* JCTiledScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCTiledScrollView.swift; sourceTree = "<group>"; };
 		12204C2A1A752F2100E969D7 /* JCTiledLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCTiledLayer.swift; sourceTree = "<group>"; };
 		12204C2B1A752F2100E969D7 /* JCTiledView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCTiledView.swift; sourceTree = "<group>"; };
-		12204C2C1A752F2100E969D7 /* JCTiledScrollView_objc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCTiledScrollView_objc.m; sourceTree = "<group>"; };
-		12204C2D1A752F2100E969D7 /* JCTiledScrollViewImportAll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCTiledScrollViewImportAll.h; sourceTree = "<group>"; };
 		12204C2E1A752F2100E969D7 /* JCPDFDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCPDFDocument.swift; sourceTree = "<group>"; };
-		12204C2F1A752F2100E969D7 /* JCTiledScrollView_objc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCTiledScrollView_objc.h; sourceTree = "<group>"; };
 		12204C301A752F2100E969D7 /* JCTiledPDFScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCTiledPDFScrollView.swift; sourceTree = "<group>"; };
 		12204C311A752F2100E969D7 /* CGPoint+JCTiledScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+JCTiledScrollView.swift"; sourceTree = "<group>"; };
 		12204C321A752F2100E969D7 /* JCVisibleAnnotationTuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCVisibleAnnotationTuple.swift; sourceTree = "<group>"; };
 		12204C331A752F2100E969D7 /* JCPDFTiledView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCPDFTiledView.swift; sourceTree = "<group>"; };
 		12204C341A752F2100E969D7 /* JCAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAnnotation.swift; sourceTree = "<group>"; };
 		12204C351A752F2100E969D7 /* JCAnnotationTapGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAnnotationTapGestureRecognizer.swift; sourceTree = "<group>"; };
-		12204C361A752F2100E969D7 /* JCTiledScrollView-Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JCTiledScrollView-Swift.h"; sourceTree = "<group>"; };
 		12204C371A752F2100E969D7 /* UIScrollView+JCTiledScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+JCTiledScrollView.swift"; sourceTree = "<group>"; };
 		12C673391A3B218D0031A142 /* Demo-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		12C6733D1A3B218D0031A142 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1324,17 +1319,13 @@
 				12204C291A752F2100E969D7 /* JCTiledScrollView.swift */,
 				12204C2A1A752F2100E969D7 /* JCTiledLayer.swift */,
 				12204C2B1A752F2100E969D7 /* JCTiledView.swift */,
-				12204C2C1A752F2100E969D7 /* JCTiledScrollView_objc.m */,
-				12204C2D1A752F2100E969D7 /* JCTiledScrollViewImportAll.h */,
 				12204C2E1A752F2100E969D7 /* JCPDFDocument.swift */,
-				12204C2F1A752F2100E969D7 /* JCTiledScrollView_objc.h */,
 				12204C301A752F2100E969D7 /* JCTiledPDFScrollView.swift */,
 				12204C311A752F2100E969D7 /* CGPoint+JCTiledScrollView.swift */,
 				12204C321A752F2100E969D7 /* JCVisibleAnnotationTuple.swift */,
 				12204C331A752F2100E969D7 /* JCPDFTiledView.swift */,
 				12204C341A752F2100E969D7 /* JCAnnotation.swift */,
 				12204C351A752F2100E969D7 /* JCAnnotationTapGestureRecognizer.swift */,
-				12204C361A752F2100E969D7 /* JCTiledScrollView-Swift.h */,
 				12204C371A752F2100E969D7 /* UIScrollView+JCTiledScrollView.swift */,
 			);
 			name = JCTiledScrollView_Swift_Source;
@@ -1916,7 +1907,6 @@
 			files = (
 				12C673411A3B218D0031A142 /* ViewController.swift in Sources */,
 				12204C401A752F2100E969D7 /* JCVisibleAnnotationTuple.swift in Sources */,
-				12204C3C1A752F2100E969D7 /* JCTiledScrollView_objc.m in Sources */,
 				12204C441A752F2100E969D7 /* UIScrollView+JCTiledScrollView.swift in Sources */,
 				12204C3A1A752F2100E969D7 /* JCTiledLayer.swift in Sources */,
 				12204C3F1A752F2100E969D7 /* CGPoint+JCTiledScrollView.swift in Sources */,
