@@ -151,7 +151,8 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		canvasView = UIView(frame: canvasFrame)
 		canvasView.userInteractionEnabled = false
 		
-		tiledView = JCTiledScrollView_objc.tiledViewFromClass(self.dynamicType.tiledLayerClass(), frame: canvasFrame) as JCTiledView
+		let tiledLayerClass = self.dynamicType.tiledLayerClass() as UIView.Type
+		tiledView = tiledLayerClass(frame: canvasFrame) as JCTiledView
 		tiledView.delegate = self
 		
 		scrollView.addSubview(tiledView)
