@@ -33,6 +33,11 @@ class JCTiledPDFScrollView: JCTiledScrollView, JCPDFTiledViewDelegate {
 		return JCPDFTiledView.self
 	}
 	
+	deinit {
+		self.document = nil
+		self.currentPage = nil
+	}
+	
 	init(frame: CGRect, URL url: NSURL) {
 		
 		var contentSize = CGSizeZero
