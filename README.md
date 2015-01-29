@@ -2,10 +2,12 @@
 
 Jesse Collis's JCTiledScrollView rewritten in Swift. A set of classes that wrap UIScrollView and CATiledLayer. It aims to simplify displaying large images and PDFs at multiple zoom scales.
 
+<br/>
+
 ![Screenshot](https://raw.githubusercontent.com/yichizhang/JCTiledScrollView_Swift/master/Screenshots/screenshot1.png)
 ![Screenshot](https://raw.githubusercontent.com/yichizhang/JCTiledScrollView_Swift/master/Screenshots/screenshot2.png)
 
-### Licence
+# Attribution
 
 This project is based on [JCTiledScrollView](https://github.com/jessedc/JCTiledScrollView) by Jesse Collis <jesse@jmcultimedia.com.au>, [@sirjec][3], [JC Multimedia Design][2].
 
