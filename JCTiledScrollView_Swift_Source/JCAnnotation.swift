@@ -24,8 +24,9 @@
  */
 import UIKit
 
-@objc protocol JCAnnotation : NSObjectProtocol {
+protocol JCAnnotation : NSObjectProtocol, Hashable {
 	
 	var contentPosition:CGPoint {get set}
 	
 }
+

@@ -118,9 +118,9 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		}
 	}
 	
-	/*private*/ var annotations = NSMutableSet()
-	/*private*/ var recycledAnnotationViews = NSMutableSet()
-	/*private*/ var visibleAnnotations = NSMutableSet()
+	/*private*/ var annotations:Set<JCAnnotation> = Set()
+	/*private*/ var recycledAnnotationViews:Set<JCAnnotationView> = Set()
+	/*private*/ var visibleAnnotations:Set<JCVisibleAnnotationTuple> = Set()
 	/*private*/ var previousSelectedAnnotationTuple:JCVisibleAnnotationTuple?
 	/*private*/ var currentSelectedAnnotationTuple:JCVisibleAnnotationTuple?
 	
