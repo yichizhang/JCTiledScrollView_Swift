@@ -42,7 +42,7 @@ class JCPDFTiledView : JCTiledView{
 		UIColor.whiteColor().setFill()
 		CGContextFillRect(ctx, CGContextGetClipBoundingBox(ctx))
 		
-		if let page:CGPDFPage = (self.delegate as JCPDFTiledViewDelegate).pdfPageForTiledView(self) {
+		if let page:CGPDFPage = (self.delegate as! JCPDFTiledViewDelegate).pdfPageForTiledView(self) {
 			
 			CGContextTranslateCTM(ctx, 0.0, self.bounds.size.height)
 			CGContextScaleCTM(ctx, 1.0, -1.0)

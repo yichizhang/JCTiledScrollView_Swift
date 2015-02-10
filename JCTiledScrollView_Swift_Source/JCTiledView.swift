@@ -51,7 +51,7 @@ class JCTiledView: UIView {
 	let kDefaultTileSize:CGFloat = 256.0
 	
 	func tiledLayer() -> JCTiledLayer{
-		return self.layer as JCTiledLayer
+		return self.layer as! JCTiledLayer
 	}
 	
 	override class func layerClass() -> AnyClass{
@@ -77,7 +77,7 @@ class JCTiledView: UIView {
 		let col = Int( rect.minX * scale / self.tileSize.width )
 		let row = Int( rect.minY * scale / self.tileSize.height )
 		
-		let tileImage = (self.delegate as JCTiledBitmapViewDelegate).tiledView(self, imageForRow:row, column:col, scale:Int(scale) )
+		let tileImage = (self.delegate as! JCTiledBitmapViewDelegate).tiledView(self, imageForRow:row, column:col, scale:Int(scale) )
 		tileImage.drawInRect(rect)
 		
 		if (self.shouldAnnotateRect){

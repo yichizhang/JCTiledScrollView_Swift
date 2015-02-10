@@ -151,8 +151,8 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		canvasView = UIView(frame: canvasFrame)
 		canvasView.userInteractionEnabled = false
 		
-		let tiledLayerClass = self.dynamicType.tiledLayerClass() as UIView.Type
-		tiledView = tiledLayerClass(frame: canvasFrame) as JCTiledView
+		let tiledLayerClass = self.dynamicType.tiledLayerClass() as! UIView.Type
+		tiledView = tiledLayerClass(frame: canvasFrame) as! JCTiledView
 		tiledView.delegate = self
 		
 		scrollView.addSubview(tiledView)
@@ -194,12 +194,12 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		
 		if (scrollView.zoomBouncing || muteAnnotationUpdates) && !scrollView.zooming {
 			for obj in visibleAnnotations {
-				let t = obj as JCVisibleAnnotationTuple
+				let t = obj as! JCVisibleAnnotationTuple
 				t.view.position = screenPositionForAnnotation(t.annotation)
 			}
 		} else {
 			for obj in annotations {
-				let annotation = obj as JCAnnotation
+				let annotation = obj as! JCAnnotation
 				let screenPosition = screenPositionForAnnotation(annotation)
 				var t = visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation)
 				
@@ -297,7 +297,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		var viewToReturn:JCAnnotationView? = nil
 		
 		for obj in self.recycledAnnotationViews {
-			let v = obj as JCAnnotationView
+			let v = obj as! JCAnnotationView
 			if v.reuseIdentifier == reuseIdentifier {
 				viewToReturn = v
 				break
@@ -318,7 +318,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		self.correctScreenPositionOfAnnotations()
 		
 		for obj in self.annotations{
-			let annotation = obj as JCAnnotation
+			let annotation = obj as! JCAnnotation
 			
 			let t = self.visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation)
 			
@@ -346,7 +346,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	
 	func addAnnotations(annotations:NSArray){
 		for annotation in annotations {
-			self.addAnnotation(annotation as JCAnnotation)
+			self.addAnnotation(annotation as! JCAnnotation)
 		}
 	}
 	
@@ -365,7 +365,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	
 	func removeAnnotations(annotations:NSArray){
 		for annotation in annotations {
-			self.removeAnnotation(annotation as JCAnnotation)
+			self.removeAnnotation(annotation as! JCAnnotation)
 		}
 	}
 	
@@ -409,7 +409,7 @@ extension JCTiledScrollView : UIGestureRecognizerDelegate{
 		
 		if gestureRecognizer.isKindOfClass(JCAnnotationTapGestureRecognizer.self) {
 			
-			let annotationGestureRecognizer = gestureRecognizer as JCAnnotationTapGestureRecognizer
+			let annotationGestureRecognizer = gestureRecognizer as! JCAnnotationTapGestureRecognizer
 			
 			previousSelectedAnnotationTuple = currentSelectedAnnotationTuple
 			currentSelectedAnnotationTuple = annotationGestureRecognizer.tapAnnotation
@@ -494,7 +494,7 @@ extension JCTiledScrollView : UIGestureRecognizerDelegate{
 		(gestureRecognizer as? JCAnnotationTapGestureRecognizer)?.tapAnnotation = nil
 		
 		for obj in self.visibleAnnotations{
-			let t = obj as JCVisibleAnnotationTuple
+			let t = obj as! JCVisibleAnnotationTuple
 			if CGRectContainsPoint(t.view.frame, location){
 				
 				(gestureRecognizer as? JCAnnotationTapGestureRecognizer)?.tapAnnotation = t
