@@ -35,7 +35,7 @@ class JCVisibleAnnotationTuple: NSObject {
 	}
 }
 
-extension NSSet {
+extension Set{ //NSSet {
 	
 	func visibleAnnotationTupleForAnnotation(annotation:JCAnnotation) -> JCVisibleAnnotationTuple? {
 		for obj in self {

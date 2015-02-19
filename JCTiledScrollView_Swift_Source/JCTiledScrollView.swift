@@ -193,13 +193,11 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		CATransaction.setAnimationDuration(0.0)
 		
 		if (scrollView.zoomBouncing || muteAnnotationUpdates) && !scrollView.zooming {
-			for obj in visibleAnnotations {
-				let t = obj as! JCVisibleAnnotationTuple
+			for t in visibleAnnotations {
 				t.view.position = screenPositionForAnnotation(t.annotation)
 			}
 		} else {
-			for obj in annotations {
-				let annotation = obj as! JCAnnotation
+			for annotation in annotations {
 				let screenPosition = screenPositionForAnnotation(annotation)
 				var t = visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation)
 				
@@ -221,7 +219,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 							if let t = t {
 								tiledScrollViewDelegate?.tiledScrollView?(self, annotationWillAppear: t.annotation)
 								
-								visibleAnnotations.addObject(t)
+								visibleAnnotations.insert(t)
 								canvasView.addSubview(t.view)
 								
 								CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
@@ -246,8 +244,8 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 						
 						if t != currentSelectedAnnotationTuple {
 							t.view.removeFromSuperview()
-							recycledAnnotationViews.addObject(t.view)
-							visibleAnnotations.removeObject(t)
+							recycledAnnotationViews.insert(t.view)
+							visibleAnnotations.remove(t)
 						}
 						else {
 							// FIXME: Anthony D - I don't like let the view in visible annotations array, but the logic is in one place
@@ -296,8 +294,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	func dequeueReusableAnnotationViewWithReuseIdentifier(reuseIdentifier:String) -> JCAnnotationView? {
 		var viewToReturn:JCAnnotationView? = nil
 		
-		for obj in self.recycledAnnotationViews {
-			let v = obj as! JCAnnotationView
+		for v in self.recycledAnnotationViews {
 			if v.reuseIdentifier == reuseIdentifier {
 				viewToReturn = v
 				break
@@ -305,7 +302,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		}
 		
 		if viewToReturn != nil{
-			self.recycledAnnotationViews.removeObject(viewToReturn!)
+			self.recycledAnnotationViews.remove(viewToReturn!)
 			
 		}
 		
@@ -317,9 +314,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	func refreshAnnotations(){
 		self.correctScreenPositionOfAnnotations()
 		
-		for obj in self.annotations{
-			let annotation = obj as! JCAnnotation
-			
+		for annotation in self.annotations{
 			let t = self.visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation)
 			
 			t?.view.setNeedsLayout()
@@ -328,7 +323,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	}
 	
 	func addAnnotation(annotation:JCAnnotation){
-		self.annotations.addObject(annotation)
+		self.annotations.insert(annotation)
 		
 		let screenPosition = self.screenPositionForAnnotation(annotation)
 		
@@ -338,7 +333,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 			view.position = screenPosition
 			
 			let t = JCVisibleAnnotationTuple(annotation: annotation, view: view)
-			self.visibleAnnotations.addObject(t)
+			self.visibleAnnotations.insert(t)
 			
 			self.canvasView.addSubview(view)
 		}
@@ -350,27 +345,31 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		}
 	}
 	
-	func removeAnnotation(annotation:JCAnnotation){
-		if self.annotations.containsObject(annotation) {
-			
-			if let t = self.visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation) {
-			
-				t.view.removeFromSuperview()
-				self.visibleAnnotations.removeObject(t)
+	func removeAnnotation(annotation:JCAnnotation?){
+		if let annotation = annotation {
+			if self.annotations.contains(annotation) {
+				
+				if let t = self.visibleAnnotations.visibleAnnotationTupleForAnnotation(annotation) {
+				
+					t.view.removeFromSuperview()
+					self.visibleAnnotations.remove(t)
+				}
+				
+				self.annotations.remove(annotation)
 			}
-			
-			self.annotations.removeObject(annotation)
 		}
 	}
 	
 	func removeAnnotations(annotations:NSArray){
 		for annotation in annotations {
-			self.removeAnnotation(annotation as! JCAnnotation)
+			self.removeAnnotation(annotation as? JCAnnotation)
 		}
 	}
 	
 	func removeAllAnnotations(){
-		self.removeAnnotations(self.annotations.allObjects)
+		for annotation in self.annotations {
+			self.removeAnnotation(annotation)
+		}
 	}
 	
 }

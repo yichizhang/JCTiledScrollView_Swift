@@ -17,18 +17,23 @@ let annotationReuseIdentifier = "JCAnnotationReuseIdentifier";
 let SkippingGirlImageName = "SkippingGirl"
 let SkippingGirlImageSize = CGSizeMake(432, 648)
 
-@objc class ViewController: UIViewController, JCTiledScrollViewDelegate, JCTileSource {
+let ButtonTitleCancel = "Cancel"
+let ButtonTitleRemoveAnnotation = "Remove this Annotation"
+
+@objc class ViewController: UIViewController, JCTiledScrollViewDelegate, JCTileSource, UIAlertViewDelegate {
 
 	var scrollView: JCTiledScrollView!
 	var infoLabel: UILabel!
 	var searchField: UITextField!
 	var mode: JCDemoType!
 	
+	weak var selectedAnnotation:JCAnnotation?
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
 		
-		if(mode? == JCDemoType.PDF){
+		if(mode == JCDemoType.PDF){
 			scrollView = JCTiledPDFScrollView(frame: self.view.bounds, URL: NSBundle.mainBundle().URLForResource("Map", withExtension: "pdf")! )
 		}else{
 			scrollView = JCTiledScrollView(frame: self.view.bounds, contentSize: SkippingGirlImageSize);
@@ -74,21 +79,31 @@ let SkippingGirlImageSize = CGSizeMake(432, 648)
 		}
 	}
 	
-	func tiledScrollViewDidZoom(scrollView: JCTiledScrollView!) {
+	// MARK: JCTiledScrollView Delegate
+	func tiledScrollViewDidZoom(scrollView: JCTiledScrollView) {
 		
 		let infoString = "zoomScale=\(scrollView.zoomScale)"
 		
 		infoLabel.text = infoString
 	}
 	
-	func tiledScrollView(scrollView: JCTiledScrollView!, didReceiveSingleTap gestureRecognizer: UIGestureRecognizer!) {
+	func tiledScrollView(scrollView: JCTiledScrollView, didReceiveSingleTap gestureRecognizer: UIGestureRecognizer) {
+		
 		var tapPoint:CGPoint = gestureRecognizer.locationInView(scrollView.tiledView)
 		
-		//Doesn't work!!!
-		//let infoString:String = String(format: "zoomScale: %0.2f, x: %0.0f y: %0.0f", scrollView.zoomScale, tapPoint.x, tapPoint.y)
 		let infoString = "(\(tapPoint.x), \(tapPoint.y)), zoomScale=\(scrollView.zoomScale)"
 		
 		infoLabel.text = infoString
+	}
+	
+	func tiledScrollView(scrollView: JCTiledScrollView, didSelectAnnotationView view: JCAnnotationView) {
+		
+		if view.annotation != nil {
+			
+			let av = UIAlertView(title: "Annotation Selected", message: "You've selected an annotation. What would you like to do with it?", delegate: self, cancelButtonTitle: ButtonTitleCancel, otherButtonTitles: ButtonTitleRemoveAnnotation )
+			av.show()
+			selectedAnnotation = view.annotation
+		}
 	}
 	
 	func tiledScrollView(scrollView: JCTiledScrollView!, viewForAnnotation annotation: JCAnnotation!) -> JCAnnotationView! {
@@ -107,10 +122,23 @@ let SkippingGirlImageSize = CGSizeMake(432, 648)
 	
 	func tiledScrollView(scrollView: JCTiledScrollView, imageForRow row: Int, column: Int, scale: Int) -> UIImage! {
 		
-		let fileName:NSString = NSString(format: "%@_%dx_%d_%d.png", SkippingGirlImageName, scale, row, column)
+		let fileName = NSString(format: "%@_%dx_%d_%d.png", SkippingGirlImageName, scale, row, column) as! String
 		return UIImage(named: fileName)
 		
 	}
-
+	
+	// MARK: UIAlertView Delegate
+	func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+		
+		switch alertView.buttonTitleAtIndex(buttonIndex){
+		case ButtonTitleCancel:
+			break
+		case ButtonTitleRemoveAnnotation:
+			scrollView.removeAnnotation(self.selectedAnnotation)
+		default:
+			break
+		}
+		
+	}
 }
 

@@ -859,6 +859,7 @@
 		12204C341A752F2100E969D7 /* JCAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAnnotation.swift; sourceTree = "<group>"; };
 		12204C351A752F2100E969D7 /* JCAnnotationTapGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAnnotationTapGestureRecognizer.swift; sourceTree = "<group>"; };
 		12204C371A752F2100E969D7 /* UIScrollView+JCTiledScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+JCTiledScrollView.swift"; sourceTree = "<group>"; };
+		1290EB171A95D6E7003C9CD9 /* JCTiledScrollView-Demo.lazycocoa */ = {isa = PBXFileReference; lastKnownFileType = text; path = "JCTiledScrollView-Demo.lazycocoa"; sourceTree = "<group>"; };
 		12C673391A3B218D0031A142 /* Demo-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		12C6733D1A3B218D0031A142 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		12C6733E1A3B218D0031A142 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1354,6 +1355,7 @@
 		12C6733B1A3B218D0031A142 /* Demo-Swift */ = {
 			isa = PBXGroup;
 			children = (
+				1290EB171A95D6E7003C9CD9 /* JCTiledScrollView-Demo.lazycocoa */,
 				12C6733E1A3B218D0031A142 /* AppDelegate.swift */,
 				12C673401A3B218D0031A142 /* ViewController.swift */,
 				12C673821A3B23570031A142 /* DemoAnnotation.swift */,

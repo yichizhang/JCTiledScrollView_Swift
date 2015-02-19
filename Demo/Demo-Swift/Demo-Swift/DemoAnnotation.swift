@@ -8,8 +8,6 @@
 
 import UIKit
 
-class DemoAnnotation: NSObject, JCAnnotation {
-
-	var contentPosition = CGPoint()
+class DemoAnnotation: JCAnnotation {
 	
 }
