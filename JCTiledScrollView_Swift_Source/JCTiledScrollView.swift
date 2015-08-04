@@ -88,7 +88,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 			if levelsOfDetail == 1 {
 				println("Note: Setting levelsOfDetail to 1 causes strange behaviour")
 			}
-			self.tiledView.numberOfZoomLevels = levelsOfDetail
+			self.tiledView.numberOfZoomLevels = size_t( levelsOfDetail )
 		}
 		get {
 			return _levelsOfDetail
@@ -493,7 +493,7 @@ extension JCTiledScrollView : UIGestureRecognizerDelegate{
 		(gestureRecognizer as? JCAnnotationTapGestureRecognizer)?.tapAnnotation = nil
 		
 		for obj in self.visibleAnnotations{
-			let t = obj as! JCVisibleAnnotationTuple
+			let t = obj as JCVisibleAnnotationTuple
 			if CGRectContainsPoint(t.view.frame, location){
 				
 				(gestureRecognizer as? JCAnnotationTapGestureRecognizer)?.tapAnnotation = t
