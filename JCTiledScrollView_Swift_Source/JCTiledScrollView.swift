@@ -53,8 +53,8 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 @objc class JCTiledScrollView : UIView{
 	
 	//Delegates
-	var tiledScrollViewDelegate: JCTiledScrollViewDelegate?
-	var dataSource: JCTileSource?
+	weak var tiledScrollViewDelegate: JCTiledScrollViewDelegate?
+	weak var dataSource: JCTileSource?
 	
 	//internals
 	var tiledView:JCTiledView!
