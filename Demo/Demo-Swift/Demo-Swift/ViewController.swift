@@ -13,7 +13,7 @@ enum JCDemoType {
 	case Image
 }
 
-let annotationReuseIdentifier = "JCAnnotationReuseIdentifier";
+let annotationReuseIdentifier = "JCAnnotationReuseIdentifier"
 let SkippingGirlImageName = "SkippingGirl"
 let SkippingGirlImageSize = CGSizeMake(432, 648)
 
@@ -36,28 +36,38 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 		if(mode == JCDemoType.PDF){
 			scrollView = JCTiledPDFScrollView(frame: self.view.bounds, URL: NSBundle.mainBundle().URLForResource("Map", withExtension: "pdf")! )
 		}else{
-			scrollView = JCTiledScrollView(frame: self.view.bounds, contentSize: SkippingGirlImageSize);
+			scrollView = JCTiledScrollView(frame: self.view.bounds, contentSize: SkippingGirlImageSize)
 		}
 		scrollView.tiledScrollViewDelegate = self
 		scrollView.zoomScale = 1.0
 		
-		scrollView.dataSource = self;
-		scrollView.tiledScrollViewDelegate = self;
+		scrollView.dataSource = self
+		scrollView.tiledScrollViewDelegate = self
 				
-		scrollView.tiledView.shouldAnnotateRect = true;
+		scrollView.tiledView.shouldAnnotateRect = true
 		 
 		// totals 4 sets of tiles across all devices, retina devices will miss out on the first 1x set
-		scrollView.levelsOfZoom = 3;
-		scrollView.levelsOfDetail = 3;
+		scrollView.levelsOfZoom = 3
+		scrollView.levelsOfDetail = 3
+		scrollView.setTranslatesAutoresizingMaskIntoConstraints(false)
 		view.addSubview(scrollView)
 		
-		let paddingX:CGFloat = 20;
-		let paddingY:CGFloat = 30;
-		infoLabel = UILabel(frame: CGRectMake(paddingX, paddingY, self.view.bounds.size.width - 2*paddingX, 30));
+		infoLabel = UILabel(frame: CGRectZero)
 		infoLabel.backgroundColor = UIColor.blackColor()
 		infoLabel.textColor = UIColor.whiteColor()
 		infoLabel.textAlignment = NSTextAlignment.Center
+		infoLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
 		view.addSubview(infoLabel)
+		
+		view.addConstraints([
+			NSLayoutConstraint(item: scrollView, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1, constant: 0),
+			NSLayoutConstraint(item: scrollView, attribute: .Height, relatedBy: .Equal, toItem: view, attribute: .Height, multiplier: 1, constant: 0),
+			NSLayoutConstraint(item: scrollView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 0),
+			NSLayoutConstraint(item: scrollView, attribute: .Leading, relatedBy: .Equal, toItem: view, attribute: .Leading, multiplier: 1, constant: 0),
+			
+			NSLayoutConstraint(item: infoLabel, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 20),
+			NSLayoutConstraint(item: infoLabel, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1, constant: 0),
+			])
 		
 		addRandomAnnotations()
 	}
@@ -69,31 +79,26 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 	
 	func addRandomAnnotations() {
 		for index in 0...4 {
-			var a:JCAnnotation = DemoAnnotation();
+			var a:JCAnnotation = DemoAnnotation()
 			a.contentPosition = CGPointMake(
-				//This is ridiculous!! Hahaha
 				CGFloat(UInt(arc4random_uniform(UInt32(UInt(scrollView.tiledView.bounds.width))))),
 				CGFloat(UInt(arc4random_uniform(UInt32(UInt(scrollView.tiledView.bounds.height)))))
-			);
-			scrollView.addAnnotation(a);
+			)
+			scrollView.addAnnotation(a)
 		}
 	}
 	
 	// MARK: JCTiledScrollView Delegate
 	func tiledScrollViewDidZoom(scrollView: JCTiledScrollView) {
 		
-		let infoString = "zoomScale=\(scrollView.zoomScale)"
-		
-		infoLabel.text = infoString
+		infoLabel.text = NSString(format: "zoomScale=%.2f", scrollView.zoomScale) as String
 	}
 	
 	func tiledScrollView(scrollView: JCTiledScrollView, didReceiveSingleTap gestureRecognizer: UIGestureRecognizer) {
 		
 		var tapPoint:CGPoint = gestureRecognizer.locationInView(scrollView.tiledView)
 		
-		let infoString = "(\(tapPoint.x), \(tapPoint.y)), zoomScale=\(scrollView.zoomScale)"
-		
-		infoLabel.text = infoString
+		infoLabel.text = NSString(format: "(%.2f, %.2f), zoomScale=%.2f", tapPoint.x, tapPoint.y, scrollView.zoomScale) as String
 	}
 	
 	func tiledScrollView(scrollView: JCTiledScrollView, didSelectAnnotationView view: JCAnnotationView) {
@@ -108,16 +113,16 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 	
 	func tiledScrollView(scrollView: JCTiledScrollView!, viewForAnnotation annotation: JCAnnotation!) -> JCAnnotationView! {
 		
-		var view:DemoAnnotationView? = scrollView.dequeueReusableAnnotationViewWithReuseIdentifier(annotationReuseIdentifier) as? DemoAnnotationView;
+		var view:DemoAnnotationView? = scrollView.dequeueReusableAnnotationViewWithReuseIdentifier(annotationReuseIdentifier) as? DemoAnnotationView
 		
 		if ( (view) == nil )
 		{
-			view = DemoAnnotationView(frame:CGRectZero, annotation:annotation, reuseIdentifier:"Identifier");
-			view!.imageView.image = UIImage(named: "marker-red.png");
-			view!.sizeToFit();
+			view = DemoAnnotationView(frame:CGRectZero, annotation:annotation, reuseIdentifier:"Identifier")
+			view!.imageView.image = UIImage(named: "marker-red.png")
+			view!.sizeToFit()
 		}
 		
-		return view;
+		return view
 	}
 	
 	func tiledScrollView(scrollView: JCTiledScrollView, imageForRow row: Int, column: Int, scale: Int) -> UIImage! {

@@ -43,7 +43,7 @@ public class DemoStyleKit : NSObject {
 		
 		let textTextHeight: CGFloat = textTextContent.boundingRectWithSize(CGSizeMake(textRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: textFontAttributes, context: nil).size.height
 		CGContextSaveGState(context)
-		CGContextClipToRect(context, textRect);
+		CGContextClipToRect(context, textRect)
 		textTextContent.drawInRect(CGRectMake(textRect.minX, textRect.minY + (textRect.height - textTextHeight) / 2, textRect.width, textTextHeight), withAttributes: textFontAttributes)
 		CGContextRestoreGState(context)
 	}

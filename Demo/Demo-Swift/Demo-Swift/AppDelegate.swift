@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		var tc = UITabBarController()
 		
 		var vc1 = ViewController()
-		vc1.mode = JCDemoType.PDF;
+		vc1.mode = JCDemoType.PDF
 		vc1.tabBarItem = UITabBarItem(title: "PDF", image: DemoStyleKit.imageOf(string: "pdf"), selectedImage: nil)
 		
 		var vc2 = ViewController()

@@ -25,12 +25,12 @@ import UIKit
 	}
 	
 	override func sizeThatFits(size: CGSize) -> CGSize {
-		return CGSizeMake(max(imageView.image!.size.width,30), max(imageView.image!.size.height,30));
+		return CGSizeMake(max(imageView.image!.size.width,30), max(imageView.image!.size.height,30))
 	}
 	
 	override func layoutSubviews() {
 		
-		imageView.sizeToFit();
+		imageView.sizeToFit()
 		imageView.frame = imageView.bounds
 	}
 	
