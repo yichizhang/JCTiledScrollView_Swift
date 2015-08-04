@@ -45,7 +45,7 @@ extension Set{ //NSSet {
 				}
 			}
 		}
-		return nil;
+		return nil
 	}
 	
 	func visibleAnnotationTupleForView(view:JCAnnotationView) -> JCVisibleAnnotationTuple? {
@@ -56,7 +56,7 @@ extension Set{ //NSSet {
 				}
 			}
 		}
-		return nil;
+		return nil
 	}
 	
 }

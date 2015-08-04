@@ -54,12 +54,12 @@ extension UIScrollView {
 		if self.contentSize.width > self.bounds.size.width {
 			newContentOffset.x = max(0.0, (center.x * self.zoomScale) - (self.bounds.size.width / 2.0) )
 			newContentOffset.x = min(newContentOffset.x,
-				(self.contentSize.width - self.bounds.size.width));
+				(self.contentSize.width - self.bounds.size.width))
 		}
 		if self.contentSize.height > self.bounds.size.height {
-			newContentOffset.y = max(0.0, (center.y * self.zoomScale) - (self.bounds.size.height / 2.0));
+			newContentOffset.y = max(0.0, (center.y * self.zoomScale) - (self.bounds.size.height / 2.0))
 			newContentOffset.y = min(newContentOffset.y,
-				(self.contentSize.height - self.bounds.size.height));
+				(self.contentSize.height - self.bounds.size.height))
 		}
 		
 		self.setContentOffset(newContentOffset, animated:animated)

@@ -50,9 +50,9 @@ class JCTiledPDFScrollView: JCTiledScrollView, JCPDFTiledViewDelegate {
 				
 				self.currentPage = tempPage
 				
-				let cropBoxRect = CGPDFPageGetBoxRect(currentPage, kCGPDFCropBox);
-				let mediaBoxRect = CGPDFPageGetBoxRect(currentPage, kCGPDFMediaBox);
-				let effectiveRect = CGRectIntersection(cropBoxRect, mediaBoxRect);
+				let cropBoxRect = CGPDFPageGetBoxRect(currentPage, kCGPDFCropBox)
+				let mediaBoxRect = CGPDFPageGetBoxRect(currentPage, kCGPDFMediaBox)
+				let effectiveRect = CGRectIntersection(cropBoxRect, mediaBoxRect)
 				
 				contentSize = effectiveRect.size
 			}else {
