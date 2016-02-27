@@ -27,20 +27,13 @@ import UIKit
 
 @objc protocol JCPDFTiledViewDelegate
 {
-	func pdfPageForTiledView(tiledView: JCPDFTiledView!) -> CGPDFPage?
+	func pdfPageForTiledView(tiledView: JCPDFTiledView!, rect: CGRect, pageNumber: UnsafeMutablePointer<Int>, pageSize: UnsafeMutablePointer<CGSize>) -> CGPDFPage?
 
 	func pdfDocumentForTiledView(tiledView: JCPDFTiledView!) -> CGPDFDocument
 }
 
 class JCPDFTiledView: JCTiledView
 {
-
-	override var tileSize: CGSize
-	{
-		return CGSizeMake(256, 256)
-		//return CGSizeMake(kDefaultTileSize, kDefaultTileSize)
-	}
-
 	override func drawRect(rect: CGRect)
 	{
 		let ctx = UIGraphicsGetCurrentContext()
@@ -48,21 +41,24 @@ class JCPDFTiledView: JCTiledView
 		UIColor.whiteColor().setFill()
 		CGContextFillRect(ctx, CGContextGetClipBoundingBox(ctx))
 
-		if let page: CGPDFPage = (self.delegate as! JCPDFTiledViewDelegate).pdfPageForTiledView(self) {
+		var pageNumber = Int(0)
+		var pageSize = CGSizeZero
 
-			CGContextTranslateCTM(ctx, 0.0, self.bounds.size.height)
-			CGContextScaleCTM(ctx, 1.0, -1.0)
-			CGContextConcatCTM(
-			ctx,
-			CGPDFPageGetDrawingTransform(page, kCGPDFCropBox, self.bounds, 0, true)
-			)
-
-			CGContextSetRenderingIntent(ctx, kCGRenderingIntentDefault)
-			CGContextSetInterpolationQuality(ctx, kCGInterpolationDefault)
-
-			CGContextDrawPDFPage(ctx, page)
-
+		guard let delegate = self.delegate as? JCPDFTiledViewDelegate else {
+			return
 		}
+		guard let page: CGPDFPage = delegate.pdfPageForTiledView(self,
+		                                                         rect: rect,
+		                                                         pageNumber: &pageNumber,
+		                                                         pageSize: &pageSize) else {
+			return
+		}
+		CGContextTranslateCTM(ctx, 0.0, CGFloat(pageNumber) * pageSize.height)
 
+		CGContextScaleCTM(ctx, 1.0, -1.0)
+		CGContextSetRenderingIntent(ctx, CGColorRenderingIntent.RenderingIntentDefault)
+		CGContextSetInterpolationQuality(ctx, CGInterpolationQuality.Default)
+
+		CGContextDrawPDFPage(ctx, page)
 	}
 }

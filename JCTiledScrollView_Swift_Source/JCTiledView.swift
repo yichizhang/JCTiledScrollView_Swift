@@ -36,11 +36,21 @@ import QuartzCore
 	func tiledView(tiledView: JCTiledView, imageForRow row: Int, column: Int, scale: Int) -> UIImage!
 }
 
+let kJCDefaultTileSize: CGFloat = 256.0
+
 class JCTiledView: UIView
 {
+	weak var delegate: JCTiledViewDelegate?
 
-	var delegate: JCTiledViewDelegate?
-	private(set) var tileSize: CGSize = CGSizeMake(256, 256)
+	var tileSize: CGSize = CGSizeMake(kJCDefaultTileSize, kJCDefaultTileSize)
+	{
+		didSet
+		{
+			let scaledTileSize = CGSizeApplyAffineTransform(self.tileSize, CGAffineTransformMakeScale(self.contentScaleFactor, self.contentScaleFactor))
+			self.tiledLayer().tileSize = scaledTileSize
+		}
+	}
+
 	var shouldAnnotateRect: Bool = false
 
 	var numberOfZoomLevels: size_t
@@ -54,8 +64,6 @@ class JCTiledView: UIView
 			self.tiledLayer().levelsOfDetailBias = newValue
 		}
 	}
-
-	let kDefaultTileSize: CGFloat = 256.0
 
 	func tiledLayer() -> JCTiledLayer
 	{
@@ -76,7 +84,7 @@ class JCTiledView: UIView
 		self.numberOfZoomLevels = 3
 	}
 
-	required init(coder aDecoder: NSCoder)
+	required init?(coder aDecoder: NSCoder)
 	{
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -93,7 +101,7 @@ class JCTiledView: UIView
 		tileImage.drawInRect(rect)
 
 		if (self.shouldAnnotateRect) {
-			self.annotateRect(rect, inContext: ctx)
+			self.annotateRect(rect, inContext: ctx!)
 		}
 	}
 

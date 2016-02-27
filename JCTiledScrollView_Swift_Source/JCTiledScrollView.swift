@@ -100,7 +100,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 			_levelsOfDetail = newValue
 
 			if levelsOfDetail == 1 {
-				println("Note: Setting levelsOfDetail to 1 causes strange behaviour")
+				print("Note: Setting levelsOfDetail to 1 causes strange behaviour")
 			}
 			self.tiledView.numberOfZoomLevels = size_t(levelsOfDetail)
 		}
@@ -165,10 +165,10 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 	{
 		super.init(frame: frame)
 
-		autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+		autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
 
 		scrollView = UIScrollView(frame: self.bounds)
-		scrollView.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+		scrollView.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
 		scrollView.delegate = self
 		scrollView.backgroundColor = UIColor.whiteColor()
 		scrollView.contentSize = contentSize
@@ -183,7 +183,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		canvasView.userInteractionEnabled = false
 
 		let tiledLayerClass = self.dynamicType.tiledLayerClass() as! UIView.Type
-		tiledView = tiledLayerClass(frame: canvasFrame) as! JCTiledView
+		tiledView = tiledLayerClass.init(frame: canvasFrame) as! JCTiledView
 		tiledView.delegate = self
 
 		scrollView.addSubview(tiledView)
@@ -208,7 +208,7 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 		tiledView.addGestureRecognizer(twoFingerTapGestureRecognizer)
 	}
 
-	required init(coder aDecoder: NSCoder)
+	required init?(coder aDecoder: NSCoder)
 	{
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -495,7 +495,7 @@ extension JCTiledScrollView: UIGestureRecognizerDelegate
 				}
 				if currentSelectedAnnotationTuple != nil {
 					if let tapAnnotation = annotationGestureRecognizer.tapAnnotation {
-						var currentSelectedAnnotationView = tapAnnotation.view
+						let currentSelectedAnnotationView = tapAnnotation.view
 						self.tiledScrollViewDelegate?.tiledScrollView?(self, didSelectAnnotationView: currentSelectedAnnotationView)
 					}
 				}
@@ -544,16 +544,17 @@ extension JCTiledScrollView: UIGestureRecognizerDelegate
 		self.tiledScrollViewDelegate?.tiledScrollView?(self, didReceiveTwoFingerTap: gestureRecognizer)
 	}
 
-	/** Catch our own tap gesture if it is on an annotation view to set annotation. Return NO to only recognize single tap on annotation
-	*/
+	/** Catch our own tap gesture if it is on an annotation view to set annotation.
+	 *Return NO to only recognize single tap on annotation
+	 */
+
 	override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool
 	{
 		let location = gestureRecognizer.locationInView(self.canvasView)
 
 		(gestureRecognizer as? JCAnnotationTapGestureRecognizer)?.tapAnnotation = nil
 
-		for obj in self.visibleAnnotations {
-			let t = obj as JCVisibleAnnotationTuple
+		for t in self.visibleAnnotations {
 			if CGRectContainsPoint(t.view.frame, location) {
 				(gestureRecognizer as? JCAnnotationTapGestureRecognizer)?.tapAnnotation = t
 				return true
