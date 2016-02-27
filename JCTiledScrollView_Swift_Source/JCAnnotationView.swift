@@ -22,47 +22,55 @@
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  
  */
+
 import UIKit
 
-@objc class JCAnnotationView: UIView {
-	
-	private var _position:CGPoint = CGPointZero
-	private var _centerOffset:CGPoint = CGPointZero
-	
-	var annotation:JCAnnotation?
-	var reuseIdentifier:NSString = ""
-	var position:CGPoint {
-		get {
+@objc class JCAnnotationView: UIView
+{
+	private var _position: CGPoint = CGPointZero
+	private var _centerOffset: CGPoint = CGPointZero
+
+	var annotation: JCAnnotation?
+	var reuseIdentifier: NSString = ""
+	var position: CGPoint
+	{
+		get
+		{
 			return _position
 		}
-		set {
-			if ( !CGPointEqualToPoint(_position, newValue) ){
+		set
+		{
+			if (!CGPointEqualToPoint(_position, newValue)) {
 				_position = newValue
 				adjustCenter()
 			}
 		}
 	}
-	var centerOffset:CGPoint {
-		get {
+	var centerOffset: CGPoint
+	{
+		get
+		{
 			return _centerOffset
 		}
-		set {
-			if ( !CGPointEqualToPoint(_centerOffset, newValue) ){
+		set
+		{
+			if (!CGPointEqualToPoint(_centerOffset, newValue)) {
 				_centerOffset = newValue
 				adjustCenter()
 			}
 		}
 	}
-	
-	convenience init(frame: CGRect, annotation:JCAnnotation, reuseIdentifier:NSString) {
-		
+
+	convenience init(frame: CGRect, annotation: JCAnnotation, reuseIdentifier: NSString)
+	{
 		self.init(frame: frame)
-		
+
 		self.annotation = annotation
 		self.reuseIdentifier = reuseIdentifier
 	}
-	
-	private func adjustCenter(){
+
+	private func adjustCenter()
+	{
 		center = CGPointMake(position.x + centerOffset.x, position.y + centerOffset.y)
 	}
 }

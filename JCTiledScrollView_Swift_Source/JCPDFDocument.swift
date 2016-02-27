@@ -22,17 +22,22 @@
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  
  */
+
 import UIKit
 import Foundation
 
-class JCPDFDocument{
-	class func createX(theURL:NSURL?, password:String?) -> CGPDFDocument? {
-		
+class JCPDFDocument
+{
+	class func createX(theURL: NSURL?, password: String?) -> CGPDFDocument?
+	{
+
 		if let theURL = theURL {
-			
-			if let thePDFDoc = CGPDFDocumentCreateWithURL(theURL as CFURLRef) { // Check for non-NULL CFURLRef
-				
-				if CGPDFDocumentIsEncrypted(thePDFDoc) == true { // Encrypted
+
+			if let thePDFDoc = CGPDFDocumentCreateWithURL(theURL as CFURLRef) {
+				// Check for non-NULL CFURLRef
+
+				if CGPDFDocumentIsEncrypted(thePDFDoc) == true {
+					// Encrypted
 					// Try a blank password first, per Apple's Quartz PDF example
 					if CGPDFDocumentUnlockWithPassword(thePDFDoc, "") == false {
 						// Nope, now let's try the provided password to unlock the PDF
@@ -41,35 +46,39 @@ class JCPDFDocument{
 							if let cPasswordString = password.cStringUsingEncoding(NSUTF8StringEncoding) {
 								if CGPDFDocumentUnlockWithPassword(thePDFDoc, cPasswordString) == false {
 									// Unlock failed
-									#if DEBUG
-										println("CGPDFDocumentCreateX: Unable to unlock " + theURL + " with " + password)
-									#endif
+#if DEBUG
+									println("CGPDFDocumentCreateX: Unable to unlock " + theURL + " with " + password)
+#endif
 								}
 							}
 						}
 					}
 				}
-				
+
 				return thePDFDoc
 			}
-		} else {
-			#if DEBUG
-			println("CGPDFDocumentCreateX: theURL == NULL")
-			#endif
 		}
-		
+		else {
+#if DEBUG
+			println("CGPDFDocumentCreateX: theURL == NULL")
+#endif
+		}
+
 		return nil
 	}
-	
-	class func needsPassword(theURL:NSURL?, password:String?) -> Bool {
-		
+
+	class func needsPassword(theURL: NSURL?, password: String?) -> Bool
+	{
+
 		var needsPassword = false // Default flag
-		
+
 		if let theURL = theURL {
-			
-			if let thePDFDoc = CGPDFDocumentCreateWithURL(theURL as CFURLRef) { // Check for non-NULL CFURLRef
-				
-				if CGPDFDocumentIsEncrypted(thePDFDoc) == true { // Encrypted
+
+			if let thePDFDoc = CGPDFDocumentCreateWithURL(theURL as CFURLRef) {
+				// Check for non-NULL CFURLRef
+
+				if CGPDFDocumentIsEncrypted(thePDFDoc) == true {
+					// Encrypted
 					// Try a blank password first, per Apple's Quartz PDF example
 					if CGPDFDocumentUnlockWithPassword(thePDFDoc, "") == false {
 						// Nope, now let's try the provided password to unlock the PDF
@@ -77,7 +86,7 @@ class JCPDFDocument{
 							// Not blank?
 							if let cPasswordString = password.cStringUsingEncoding(NSUTF8StringEncoding) {
 								if CGPDFDocumentUnlockWithPassword(thePDFDoc, cPasswordString) == false {
-									
+
 									needsPassword = true
 								}
 							}
@@ -85,10 +94,11 @@ class JCPDFDocument{
 					}
 				}
 			}
-		} else {
+		}
+		else {
 			needsPassword = true
 		}
-		
+
 		return needsPassword
 	}
 }

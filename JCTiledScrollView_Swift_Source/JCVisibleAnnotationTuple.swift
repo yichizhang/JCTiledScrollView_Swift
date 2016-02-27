@@ -22,41 +22,47 @@
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  
  */
+
 import UIKit
 
-class JCVisibleAnnotationTuple: NSObject {
-	var annotation:JCAnnotation!
-	var view:JCAnnotationView!
-	
-	convenience init(annotation:JCAnnotation, view:JCAnnotationView){
+class JCVisibleAnnotationTuple: NSObject
+{
+	var annotation: JCAnnotation!
+	var view: JCAnnotationView!
+
+	convenience init(annotation: JCAnnotation, view: JCAnnotationView)
+	{
 		self.init()
 		self.annotation = annotation
 		self.view = view
 	}
 }
 
-extension Set{ //NSSet {
-	
-	func visibleAnnotationTupleForAnnotation(annotation:JCAnnotation) -> JCVisibleAnnotationTuple? {
+extension Set
+{
+	//NSSet {
+
+	func visibleAnnotationTupleForAnnotation(annotation: JCAnnotation) -> JCVisibleAnnotationTuple?
+	{
 		for obj in self {
 			if let t = obj as? JCVisibleAnnotationTuple {
-				if t.annotation === annotation{
+				if t.annotation === annotation {
 					return t
 				}
 			}
 		}
 		return nil
 	}
-	
-	func visibleAnnotationTupleForView(view:JCAnnotationView) -> JCVisibleAnnotationTuple? {
+
+	func visibleAnnotationTupleForView(view: JCAnnotationView) -> JCVisibleAnnotationTuple?
+	{
 		for obj in self {
 			if let t = obj as? JCVisibleAnnotationTuple {
-				if t.view === view{
+				if t.view === view {
 					return t
 				}
 			}
 		}
 		return nil
 	}
-	
 }
