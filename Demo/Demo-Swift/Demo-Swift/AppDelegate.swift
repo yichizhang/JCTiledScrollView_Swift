@@ -20,11 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		var vc1 = ViewController()
 		vc1.mode = JCDemoType.PDF
-		vc1.tabBarItem = UITabBarItem(title: "PDF", image: DemoStyleKit.imageOf(string: "pdf"), selectedImage: nil)
+		vc1.tabBarItem = UITabBarItem(title: "PDF", image: DemoStyleKit.imageOfString("pdf"), selectedImage: nil)
 		
 		var vc2 = ViewController()
 		vc2.mode = JCDemoType.Image
-		vc2.tabBarItem = UITabBarItem(title: "Image", image: DemoStyleKit.imageOf(string: "img"), selectedImage: nil)
+		vc2.tabBarItem = UITabBarItem(title: "Image", image: DemoStyleKit.imageOfString("img"), selectedImage: nil)
 		
 		tc.viewControllers = [vc1, vc2]
 		tc.tabBar.translucent = false

@@ -49,14 +49,14 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 		// totals 4 sets of tiles across all devices, retina devices will miss out on the first 1x set
 		scrollView.levelsOfZoom = 3
 		scrollView.levelsOfDetail = 3
-		scrollView.setTranslatesAutoresizingMaskIntoConstraints(false)
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		view.addSubview(scrollView)
 		
 		infoLabel = UILabel(frame: CGRectZero)
 		infoLabel.backgroundColor = UIColor.blackColor()
 		infoLabel.textColor = UIColor.whiteColor()
 		infoLabel.textAlignment = NSTextAlignment.Center
-		infoLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+		infoLabel.translatesAutoresizingMaskIntoConstraints = false
 		view.addSubview(infoLabel)
 		
 		view.addConstraints([
@@ -78,8 +78,8 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 	}
 	
 	func addRandomAnnotations() {
-		for index in 0...4 {
-			var a:JCAnnotation = DemoAnnotation()
+		for _ in 0...4 {
+			let a:JCAnnotation = DemoAnnotation()
 			a.contentPosition = CGPointMake(
 				CGFloat(UInt(arc4random_uniform(UInt32(UInt(scrollView.tiledView.bounds.width))))),
 				CGFloat(UInt(arc4random_uniform(UInt32(UInt(scrollView.tiledView.bounds.height)))))
@@ -96,7 +96,7 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 	
 	func tiledScrollView(scrollView: JCTiledScrollView, didReceiveSingleTap gestureRecognizer: UIGestureRecognizer) {
 		
-		var tapPoint:CGPoint = gestureRecognizer.locationInView(scrollView.tiledView)
+		let tapPoint:CGPoint = gestureRecognizer.locationInView(scrollView.tiledView)
 		
 		infoLabel.text = NSString(format: "(%.2f, %.2f), zoomScale=%.2f", tapPoint.x, tapPoint.y, scrollView.zoomScale) as String
 	}
@@ -127,7 +127,7 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 	
 	func tiledScrollView(scrollView: JCTiledScrollView, imageForRow row: Int, column: Int, scale: Int) -> UIImage! {
 		
-		let fileName = NSString(format: "%@_%dx_%d_%d.png", SkippingGirlImageName, scale, row, column) as! String
+		let fileName = NSString(format: "%@_%dx_%d_%d.png", SkippingGirlImageName, scale, row, column) as String
 		return UIImage(named: fileName)
 		
 	}
@@ -135,11 +135,16 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 	// MARK: UIAlertView Delegate
 	func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
 		
-		switch alertView.buttonTitleAtIndex(buttonIndex){
+		guard let buttonTitle = alertView.buttonTitleAtIndex(buttonIndex) else {
+			return
+		}
+		switch buttonTitle {
 		case ButtonTitleCancel:
 			break
 		case ButtonTitleRemoveAnnotation:
-			scrollView.removeAnnotation(self.selectedAnnotation)
+			if let selectedAnnotation = self.selectedAnnotation {
+				scrollView.removeAnnotation(selectedAnnotation)
+			}
 		default:
 			break
 		}
