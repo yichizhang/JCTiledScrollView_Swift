@@ -16,13 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		// Override point for customization after application launch.
-		var tc = UITabBarController()
+		let tc = UITabBarController()
 		
-		var vc1 = ViewController()
+		let vc1 = ViewController()
 		vc1.mode = JCDemoType.PDF
 		vc1.tabBarItem = UITabBarItem(title: "PDF", image: DemoStyleKit.imageOfString("pdf"), selectedImage: nil)
 		
-		var vc2 = ViewController()
+		let vc2 = ViewController()
 		vc2.mode = JCDemoType.Image
 		vc2.tabBarItem = UITabBarItem(title: "Image", image: DemoStyleKit.imageOfString("img"), selectedImage: nil)
 		
