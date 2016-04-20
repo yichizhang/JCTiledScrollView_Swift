@@ -27,14 +27,14 @@ import UIKit
 
 @objc protocol JCAnnotationProtocol: NSObjectProtocol
 {
-	var contentPosition: CGPoint
-	{
-		get set
-	}
+    var contentPosition: CGPoint
+    {
+        get set
+    }
 }
 
 class JCAnnotation: NSObject, JCAnnotationProtocol
 {
-	var contentPosition = CGPointZero
+    var contentPosition = CGPointZero
 }
 
