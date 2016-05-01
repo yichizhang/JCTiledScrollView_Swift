@@ -17,7 +17,7 @@ import UIKit
 public class DemoStyleKit : NSObject {
 	
 	class var mainFont:UIFont {
-		return UIFont(name: "HelveticaNeue-LightItalic", size: 14)!
+		return UIFont(name: "HelveticaNeue-Bold", size: 14)!
 	}
 	
 	//// Cache

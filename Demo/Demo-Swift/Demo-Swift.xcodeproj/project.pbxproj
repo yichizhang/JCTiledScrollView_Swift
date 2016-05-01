@@ -409,7 +409,6 @@
 		12204C231A752F1700E969D7 /* SkippingGirl_8x_9_8.png in Resources */ = {isa = PBXBuildFile; fileRef = 12204A901A752F1700E969D7 /* SkippingGirl_8x_9_8.png */; };
 		12204C241A752F1700E969D7 /* SkippingGirl_8x_9_9.png in Resources */ = {isa = PBXBuildFile; fileRef = 12204A911A752F1700E969D7 /* SkippingGirl_8x_9_9.png */; };
 		12204C251A752F1700E969D7 /* Map.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 12204A921A752F1700E969D7 /* Map.pdf */; };
-		12204C261A752F1700E969D7 /* marker-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 12204A931A752F1700E969D7 /* marker-red.png */; };
 		12204C381A752F2100E969D7 /* JCAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12204C281A752F2100E969D7 /* JCAnnotationView.swift */; };
 		12204C391A752F2100E969D7 /* JCTiledScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12204C291A752F2100E969D7 /* JCTiledScrollView.swift */; };
 		12204C3A1A752F2100E969D7 /* JCTiledLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12204C2A1A752F2100E969D7 /* JCTiledLayer.swift */; };
@@ -846,7 +845,6 @@
 		12204A901A752F1700E969D7 /* SkippingGirl_8x_9_8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SkippingGirl_8x_9_8.png; sourceTree = "<group>"; };
 		12204A911A752F1700E969D7 /* SkippingGirl_8x_9_9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SkippingGirl_8x_9_9.png; sourceTree = "<group>"; };
 		12204A921A752F1700E969D7 /* Map.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Map.pdf; sourceTree = "<group>"; };
-		12204A931A752F1700E969D7 /* marker-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-red.png"; sourceTree = "<group>"; };
 		12204C281A752F2100E969D7 /* JCAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCAnnotationView.swift; sourceTree = "<group>"; };
 		12204C291A752F2100E969D7 /* JCTiledScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCTiledScrollView.swift; sourceTree = "<group>"; };
 		12204C2A1A752F2100E969D7 /* JCTiledLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JCTiledLayer.swift; sourceTree = "<group>"; };
@@ -899,7 +897,6 @@
 			children = (
 				122049001A752F1600E969D7 /* tiles */,
 				12204A921A752F1700E969D7 /* Map.pdf */,
-				12204A931A752F1700E969D7 /* marker-red.png */,
 			);
 			name = Assets;
 			path = ../Assets;
@@ -1596,7 +1593,6 @@
 				12204BE61A752F1700E969D7 /* SkippingGirl_8x_5_3.png in Resources */,
 				12204C001A752F1700E969D7 /* SkippingGirl_8x_7_13.png in Resources */,
 				12204BE71A752F1700E969D7 /* SkippingGirl_8x_5_4.png in Resources */,
-				12204C261A752F1700E969D7 /* marker-red.png in Resources */,
 				12204ADA1A752F1700E969D7 /* SkippingGirl_4x_4_5.png in Resources */,
 				12204B391A752F1700E969D7 /* SkippingGirl_8x_13_10.png in Resources */,
 				12204AEC1A752F1700E969D7 /* SkippingGirl_4x_7_2.png in Resources */,

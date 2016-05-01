@@ -43,6 +43,17 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
 
     optional func tiledScrollView(scrollView: JCTiledScrollView, annotationDidAppear annotation: JCAnnotation) -> ()
 
+    /**
+     Whether the annotation view be selected. If not implemented, defaults to `true`
+
+     - Parameters:
+     - scrollView: The tiled scroll view
+     - view: The annotation view
+
+     - Returns: Whether the annotation view be selected
+     */
+    optional func tiledScrollView(scrollView: JCTiledScrollView, shouldSelectAnnotationView view: JCAnnotationView) -> Bool
+
     optional func tiledScrollView(scrollView: JCTiledScrollView, didSelectAnnotationView view: JCAnnotationView) -> ()
 
     optional func tiledScrollView(scrollView: JCTiledScrollView, didDeselectAnnotationView view: JCAnnotationView) -> ()
@@ -496,7 +507,12 @@ extension JCTiledScrollView: UIGestureRecognizerDelegate
                 if currentSelectedAnnotationTuple != nil {
                     if let tapAnnotation = annotationGestureRecognizer.tapAnnotation {
                         let currentSelectedAnnotationView = tapAnnotation.view
-                        self.tiledScrollViewDelegate?.tiledScrollView?(self, didSelectAnnotationView: currentSelectedAnnotationView)
+                        if (tiledScrollViewDelegate?.tiledScrollView?(self, shouldSelectAnnotationView: currentSelectedAnnotationView) ?? true) == true {
+                            self.tiledScrollViewDelegate?.tiledScrollView?(self, didSelectAnnotationView: currentSelectedAnnotationView)
+                        }
+                        else {
+                            self.tiledScrollViewDelegate?.tiledScrollView?(self, didReceiveSingleTap: gestureRecognizer)
+                        }
                     }
                 }
             }

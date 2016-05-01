@@ -13,14 +13,15 @@ enum JCDemoType {
 	case Image
 }
 
-let annotationReuseIdentifier = "JCAnnotationReuseIdentifier"
 let SkippingGirlImageName = "SkippingGirl"
 let SkippingGirlImageSize = CGSizeMake(432, 648)
 
 let ButtonTitleCancel = "Cancel"
 let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 
-@objc class ViewController: UIViewController, JCTiledScrollViewDelegate, JCTileSource, UIAlertViewDelegate {
+@objc class ViewController: UIViewController, JCTiledScrollViewDelegate, JCTileSource, UIAlertViewDelegate
+{
+    let demoAnnotationViewReuseID = "DemoAnnotationView"
 
 	var scrollView: JCTiledScrollView!
 	var infoLabel: UILabel!
@@ -70,6 +71,7 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 			])
 		
 		addRandomAnnotations()
+        scrollView.refreshAnnotations()
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -78,13 +80,13 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 	}
 	
 	func addRandomAnnotations() {
-		for _ in 0...4 {
-			let a:JCAnnotation = DemoAnnotation()
-			a.contentPosition = CGPointMake(
+		for number in 0...8 {
+            let annotation = DemoAnnotation(isSelectable: (number % 3 != 0))
+			annotation.contentPosition = CGPointMake(
 				CGFloat(UInt(arc4random_uniform(UInt32(UInt(scrollView.tiledView.bounds.width))))),
 				CGFloat(UInt(arc4random_uniform(UInt32(UInt(scrollView.tiledView.bounds.height)))))
 			)
-			scrollView.addAnnotation(a)
+			scrollView.addAnnotation(annotation)
 		}
 	}
 	
@@ -100,29 +102,60 @@ let ButtonTitleRemoveAnnotation = "Remove this Annotation"
 		
 		infoLabel.text = NSString(format: "(%.2f, %.2f), zoomScale=%.2f", tapPoint.x, tapPoint.y, scrollView.zoomScale) as String
 	}
+
+    func tiledScrollView(scrollView: JCTiledScrollView, shouldSelectAnnotationView view: JCAnnotationView) -> Bool
+    {
+        if let annotation = view.annotation as? DemoAnnotation {
+            return annotation.isSelectable
+        }
+        return true
+    }
 	
-	func tiledScrollView(scrollView: JCTiledScrollView, didSelectAnnotationView view: JCAnnotationView) {
-		
-		if view.annotation != nil {
-			
-			let av = UIAlertView(title: "Annotation Selected", message: "You've selected an annotation. What would you like to do with it?", delegate: self, cancelButtonTitle: ButtonTitleCancel, otherButtonTitles: ButtonTitleRemoveAnnotation )
-			av.show()
-			selectedAnnotation = view.annotation
-		}
+	func tiledScrollView(scrollView: JCTiledScrollView, didSelectAnnotationView view: JCAnnotationView)
+    {
+        guard let
+            annotationView = view as? DemoAnnotationView,
+            annotation = annotationView.annotation as? DemoAnnotation else {
+                return
+        }
+        let alertView = UIAlertView(
+            title: "Annotation Selected",
+            message: "You've selected an annotation. What would you like to do with it?",
+            delegate: self,
+            cancelButtonTitle: ButtonTitleCancel,
+            otherButtonTitles: ButtonTitleRemoveAnnotation )
+        alertView.show()
+
+        selectedAnnotation = annotation
+
+        annotation.isSelected = true
+        annotationView.updateForAnnotation(annotation)
 	}
+
+    func tiledScrollView(scrollView: JCTiledScrollView, didDeselectAnnotationView view: JCAnnotationView)
+    {
+        guard let
+            annotationView = view as? DemoAnnotationView,
+            annotation = annotationView.annotation as? DemoAnnotation else {
+                return
+        }
+
+        selectedAnnotation = nil
+
+        annotation.isSelected = false
+        annotationView.updateForAnnotation(annotation)
+    }
 	
-	func tiledScrollView(scrollView: JCTiledScrollView!, viewForAnnotation annotation: JCAnnotation!) -> JCAnnotationView! {
-		
-		var view:DemoAnnotationView? = scrollView.dequeueReusableAnnotationViewWithReuseIdentifier(annotationReuseIdentifier) as? DemoAnnotationView
-		
-		if ( (view) == nil )
-		{
-			view = DemoAnnotationView(frame:CGRectZero, annotation:annotation, reuseIdentifier:"Identifier")
-			view!.imageView.image = UIImage(named: "marker-red.png")
-			view!.sizeToFit()
-		}
-		
-		return view
+	func tiledScrollView(scrollView: JCTiledScrollView!, viewForAnnotation annotation: JCAnnotation!) -> JCAnnotationView!
+    {
+        var annotationView: DemoAnnotationView!
+        annotationView =
+            (scrollView.dequeueReusableAnnotationViewWithReuseIdentifier(demoAnnotationViewReuseID) as? DemoAnnotationView) ??
+            DemoAnnotationView(frame:CGRectZero, annotation:annotation, reuseIdentifier:demoAnnotationViewReuseID)
+
+        annotationView.updateForAnnotation(annotation as? DemoAnnotation)
+
+        return annotationView
 	}
 	
 	func tiledScrollView(scrollView: JCTiledScrollView, imageForRow row: Int, column: Int, scale: Int) -> UIImage! {
