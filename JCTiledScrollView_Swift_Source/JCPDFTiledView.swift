@@ -27,38 +27,38 @@ import UIKit
 
 @objc protocol JCPDFTiledViewDelegate
 {
-	func pdfPageForTiledView(tiledView: JCPDFTiledView!, rect: CGRect, pageNumber: UnsafeMutablePointer<Int>, pageSize: UnsafeMutablePointer<CGSize>) -> CGPDFPage?
+    func pdfPageForTiledView(tiledView: JCPDFTiledView!, rect: CGRect, pageNumber: UnsafeMutablePointer<Int>, pageSize: UnsafeMutablePointer<CGSize>) -> CGPDFPage?
 
-	func pdfDocumentForTiledView(tiledView: JCPDFTiledView!) -> CGPDFDocument
+    func pdfDocumentForTiledView(tiledView: JCPDFTiledView!) -> CGPDFDocument
 }
 
 class JCPDFTiledView: JCTiledView
 {
-	override func drawRect(rect: CGRect)
-	{
-		let ctx = UIGraphicsGetCurrentContext()
+    override func drawRect(rect: CGRect)
+    {
+        let ctx = UIGraphicsGetCurrentContext()
 
-		UIColor.whiteColor().setFill()
-		CGContextFillRect(ctx, CGContextGetClipBoundingBox(ctx))
+        UIColor.whiteColor().setFill()
+        CGContextFillRect(ctx, CGContextGetClipBoundingBox(ctx))
 
-		var pageNumber = Int(0)
-		var pageSize = CGSizeZero
+        var pageNumber = Int(0)
+        var pageSize = CGSizeZero
 
-		guard let delegate = self.delegate as? JCPDFTiledViewDelegate else {
-			return
-		}
-		guard let page: CGPDFPage = delegate.pdfPageForTiledView(self,
-		                                                         rect: rect,
-		                                                         pageNumber: &pageNumber,
-		                                                         pageSize: &pageSize) else {
-			return
-		}
-		CGContextTranslateCTM(ctx, 0.0, CGFloat(pageNumber) * pageSize.height)
+        guard let delegate = self.delegate as? JCPDFTiledViewDelegate else {
+            return
+        }
+        guard let page: CGPDFPage = delegate.pdfPageForTiledView(self,
+                                                                 rect: rect,
+                                                                 pageNumber: &pageNumber,
+                                                                 pageSize: &pageSize) else {
+            return
+        }
+        CGContextTranslateCTM(ctx, 0.0, CGFloat(pageNumber) * pageSize.height)
 
-		CGContextScaleCTM(ctx, 1.0, -1.0)
-		CGContextSetRenderingIntent(ctx, CGColorRenderingIntent.RenderingIntentDefault)
-		CGContextSetInterpolationQuality(ctx, CGInterpolationQuality.Default)
+        CGContextScaleCTM(ctx, 1.0, -1.0)
+        CGContextSetRenderingIntent(ctx, CGColorRenderingIntent.RenderingIntentDefault)
+        CGContextSetInterpolationQuality(ctx, CGInterpolationQuality.Default)
 
-		CGContextDrawPDFPage(ctx, page)
-	}
+        CGContextDrawPDFPage(ctx, page)
+    }
 }

@@ -27,42 +27,42 @@ import UIKit
 
 class JCVisibleAnnotationTuple: NSObject
 {
-	var annotation: JCAnnotation!
-	var view: JCAnnotationView!
+    var annotation: JCAnnotation!
+    var view: JCAnnotationView!
 
-	convenience init(annotation: JCAnnotation, view: JCAnnotationView)
-	{
-		self.init()
-		self.annotation = annotation
-		self.view = view
-	}
+    convenience init(annotation: JCAnnotation, view: JCAnnotationView)
+    {
+        self.init()
+        self.annotation = annotation
+        self.view = view
+    }
 }
 
 extension Set
 {
-	//NSSet {
+    //NSSet {
 
-	func visibleAnnotationTupleForAnnotation(annotation: JCAnnotation) -> JCVisibleAnnotationTuple?
-	{
-		for obj in self {
-			if let t = obj as? JCVisibleAnnotationTuple {
-				if t.annotation === annotation {
-					return t
-				}
-			}
-		}
-		return nil
-	}
+    func visibleAnnotationTupleForAnnotation(annotation: JCAnnotation) -> JCVisibleAnnotationTuple?
+    {
+        for obj in self {
+            if let t = obj as? JCVisibleAnnotationTuple {
+                if t.annotation === annotation {
+                    return t
+                }
+            }
+        }
+        return nil
+    }
 
-	func visibleAnnotationTupleForView(view: JCAnnotationView) -> JCVisibleAnnotationTuple?
-	{
-		for obj in self {
-			if let t = obj as? JCVisibleAnnotationTuple {
-				if t.view === view {
-					return t
-				}
-			}
-		}
-		return nil
-	}
+    func visibleAnnotationTupleForView(view: JCAnnotationView) -> JCVisibleAnnotationTuple?
+    {
+        for obj in self {
+            if let t = obj as? JCVisibleAnnotationTuple {
+                if t.view === view {
+                    return t
+                }
+            }
+        }
+        return nil
+    }
 }

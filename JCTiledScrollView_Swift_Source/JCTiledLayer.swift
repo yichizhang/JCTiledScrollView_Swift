@@ -27,11 +27,11 @@ import UIKit
 
 class JCTiledLayer: CATiledLayer
 {
-	let kDefaultFadeDuration: CFTimeInterval = 0.08
+    let kDefaultFadeDuration: CFTimeInterval = 0.08
 
-	var fadeDuration: CFTimeInterval
-	{
-		return kDefaultFadeDuration
-	}
+    var fadeDuration: CFTimeInterval
+    {
+        return kDefaultFadeDuration
+    }
 }
 
