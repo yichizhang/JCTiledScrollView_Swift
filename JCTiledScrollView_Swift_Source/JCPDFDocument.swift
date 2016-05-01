@@ -44,7 +44,7 @@ class JCPDFDocument
                 if CGPDFDocumentUnlockWithPassword(document, cPasswordString) == false {
                     // Unlock failed
 #if DEBUG
-                    println("CGPDFDocumentCreateX: Unable to unlock " + theURL + " with " + password)
+                    print("CGPDFDocumentCreateX: Unable to unlock \(documentURL)")
 #endif
                 }
             }

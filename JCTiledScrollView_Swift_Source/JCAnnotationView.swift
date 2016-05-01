@@ -31,7 +31,7 @@ import UIKit
     private var _centerOffset: CGPoint = CGPointZero
 
     var annotation: JCAnnotation?
-    var reuseIdentifier: NSString = ""
+    var reuseIdentifier: String = ""
     var position: CGPoint
     {
         get
@@ -61,12 +61,17 @@ import UIKit
         }
     }
 
-    convenience init(frame: CGRect, annotation: JCAnnotation, reuseIdentifier: NSString)
+    init(frame: CGRect, annotation: JCAnnotation, reuseIdentifier: String)
     {
-        self.init(frame: frame)
+        super.init(frame: frame)
 
         self.annotation = annotation
         self.reuseIdentifier = reuseIdentifier
+    }
+
+    required init?(coder aDecoder: NSCoder)
+    {
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func adjustCenter()
