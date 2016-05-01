@@ -1,9 +1,12 @@
 //
-//  Demo_SwiftTests.swift
-//  Demo-SwiftTests
+//  Copyright (c) 2015-present Yichi Zhang
+//  https://github.com/yichizhang
+//  zhang-yi-chi@hotmail.com
 //
-//  Created by Yichi on 13/12/2014.
-//  Copyright (c) 2014 Yichi Zhang. All rights reserved.
+//  This source code is licensed under MIT license found in the LICENSE file
+//  in the root directory of this source tree.
+//  Attribution can be found in the ATTRIBUTION file in the root directory 
+//  of this source tree.
 //
 
 import UIKit
