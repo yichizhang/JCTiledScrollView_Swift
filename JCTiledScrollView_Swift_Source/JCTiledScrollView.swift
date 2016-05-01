@@ -188,18 +188,24 @@ let kJCTiledScrollViewAnimationTime = NSTimeInterval(0.1)
         addSubview(scrollView)
         addSubview(canvasView)
 
-        singleTapGestureRecognizer = JCAnnotationTapGestureRecognizer(target: self, action: "singleTapReceived:")
+        singleTapGestureRecognizer = JCAnnotationTapGestureRecognizer(
+            target: self,
+            action: #selector(singleTapReceived(_:)))
         singleTapGestureRecognizer.numberOfTapsRequired = 1
         singleTapGestureRecognizer.delegate = self
         tiledView.addGestureRecognizer(singleTapGestureRecognizer)
 
-        doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: "doubleTapReceived:")
+        doubleTapGestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(doubleTapReceived(_:)))
         doubleTapGestureRecognizer.numberOfTapsRequired = 2
         tiledView.addGestureRecognizer(doubleTapGestureRecognizer)
 
         singleTapGestureRecognizer.requireGestureRecognizerToFail(doubleTapGestureRecognizer)
 
-        twoFingerTapGestureRecognizer = UITapGestureRecognizer(target: self, action: "twoFingerTapReceived:")
+        twoFingerTapGestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(twoFingerTapReceived(_:)))
         twoFingerTapGestureRecognizer.numberOfTouchesRequired = 2
         twoFingerTapGestureRecognizer.numberOfTapsRequired = 1
         tiledView.addGestureRecognizer(twoFingerTapGestureRecognizer)
