@@ -13,7 +13,8 @@ class DemoAnnotation: JCAnnotation
     var isSelectable = false
     var isSelected = false
 
-    init(isSelectable: Bool) {
+    init(isSelectable: Bool)
+    {
         super.init()
 
         self.isSelectable = isSelectable
