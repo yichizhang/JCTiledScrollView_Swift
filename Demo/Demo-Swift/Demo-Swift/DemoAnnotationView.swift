@@ -10,8 +10,10 @@ import UIKit
 
 class DemoAnnotationView: JCAnnotationView
 {
-    var markerColor: UIColor! {
-        didSet {
+    var markerColor: UIColor!
+    {
+        didSet
+        {
             sizeToFit()
             setNeedsDisplay()
         }
@@ -34,7 +36,7 @@ class DemoAnnotationView: JCAnnotationView
     {
         return CGSizeMake(64, 64)
     }
-    
+
     override func drawRect(rect: CGRect)
     {
         // Marker
@@ -70,7 +72,7 @@ class DemoAnnotationView: JCAnnotationView
     func updateForAnnotation(annotation: DemoAnnotation?)
     {
         self.annotation = annotation
-        
+
         let isSelectable = annotation?.isSelectable ?? true
         let isSelected = annotation?.isSelected ?? false
 
