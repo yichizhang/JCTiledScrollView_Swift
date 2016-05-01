@@ -1,36 +1,45 @@
 //
-//  Demo_SwiftTests.swift
-//  Demo-SwiftTests
+//  Copyright (c) 2015-present Yichi Zhang
+//  https://github.com/yichizhang
+//  zhang-yi-chi@hotmail.com
 //
-//  Created by Yichi on 13/12/2014.
-//  Copyright (c) 2014 Yichi Zhang. All rights reserved.
+//  This source code is licensed under MIT license found in the LICENSE file
+//  in the root directory of this source tree.
+//  Attribution can be found in the ATTRIBUTION file in the root directory 
+//  of this source tree.
 //
 
 import UIKit
 import XCTest
 
-class Demo_SwiftTests: XCTestCase {
-    
-    override func setUp() {
+class Demo_SwiftTests: XCTestCase
+{
+
+    override func setUp()
+    {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
-    override func tearDown() {
+
+    override func tearDown()
+    {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    func testExample() {
+
+    func testExample()
+    {
         // This is an example of a functional test case.
         XCTAssert(true, "Pass")
     }
-    
-    func testPerformanceExample() {
+
+    func testPerformanceExample()
+    {
         // This is an example of a performance test case.
-        self.measureBlock() {
+        self.measureBlock()
+        {
             // Put the code you want to measure the time of here.
         }
     }
-    
+
 }
