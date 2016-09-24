@@ -28,7 +28,7 @@ extension Set
 {
     //NSSet {
 
-    func visibleAnnotationTupleForAnnotation(annotation: JCAnnotation) -> JCVisibleAnnotationTuple?
+    func visibleAnnotationTupleForAnnotation(_ annotation: JCAnnotation) -> JCVisibleAnnotationTuple?
     {
         for obj in self {
             if let t = obj as? JCVisibleAnnotationTuple {
@@ -40,7 +40,7 @@ extension Set
         return nil
     }
 
-    func visibleAnnotationTupleForView(view: JCAnnotationView) -> JCVisibleAnnotationTuple?
+    func visibleAnnotationTupleForView(_ view: JCAnnotationView) -> JCVisibleAnnotationTuple?
     {
         for obj in self {
             if let t = obj as? JCVisibleAnnotationTuple {
