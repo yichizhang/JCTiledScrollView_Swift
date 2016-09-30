@@ -413,7 +413,7 @@ let kJCTiledScrollViewAnimationTime = TimeInterval(0.1)
     func removeAnnotations(_ annotations: [JCAnnotation])
     {
         for annotation in annotations {
-            self.removeAnnotation(annotation as? JCAnnotation)
+            self.removeAnnotation(annotation)
         }
     }
 
