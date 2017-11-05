@@ -13,21 +13,21 @@ import UIKit
 
 let kJCTiledScrollViewAnimationTime = TimeInterval(0.1)
 
-@objc protocol JCTiledScrollViewDelegate: NSObjectProtocol
-{
-    func tiledScrollView(_ scrollView: JCTiledScrollView!, viewForAnnotation annotation: JCAnnotation!) -> JCAnnotationView!
+@objc protocol JCTiledScrollViewDelegate: NSObjectProtocol {
+    
+    func tiledScrollView(_ scrollView: JCTiledScrollView, viewForAnnotation annotation: JCAnnotation) -> JCAnnotationView
 
-    @objc optional func tiledScrollViewDidZoom(_ scrollView: JCTiledScrollView) -> ()
+    @objc optional func tiledScrollViewDidZoom(_ scrollView: JCTiledScrollView)
 
-    @objc optional func tiledScrollViewDidScroll(_ scrollView: JCTiledScrollView) -> ()
+    @objc optional func tiledScrollViewDidScroll(_ scrollView: JCTiledScrollView)
 
-    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, annotationWillDisappear annotation: JCAnnotation) -> ()
+    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, annotationWillDisappear annotation: JCAnnotation)
 
-    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, annotationDidDisappear annotation: JCAnnotation) -> ()
+    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, annotationDidDisappear annotation: JCAnnotation)
 
-    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, annotationWillAppear annotation: JCAnnotation) -> ()
+    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, annotationWillAppear annotation: JCAnnotation)
 
-    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, annotationDidAppear annotation: JCAnnotation) -> ()
+    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, annotationDidAppear annotation: JCAnnotation)
 
     /**
      Whether the annotation view be selected. If not implemented, defaults to `true`
@@ -40,24 +40,24 @@ let kJCTiledScrollViewAnimationTime = TimeInterval(0.1)
      */
     @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, shouldSelectAnnotationView view: JCAnnotationView) -> Bool
 
-    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didSelectAnnotationView view: JCAnnotationView) -> ()
+    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didSelectAnnotationView view: JCAnnotationView)
 
-    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didDeselectAnnotationView view: JCAnnotationView) -> ()
+    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didDeselectAnnotationView view: JCAnnotationView)
 
-    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didReceiveSingleTap gestureRecognizer: UIGestureRecognizer) -> ()
+    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didReceiveSingleTap gestureRecognizer: UIGestureRecognizer)
 
-    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didReceiveDoubleTap gestureRecognizer: UIGestureRecognizer) -> ()
+    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didReceiveDoubleTap gestureRecognizer: UIGestureRecognizer)
 
-    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didReceiveTwoFingerTap gestureRecognizer: UIGestureRecognizer) -> ()
+    @objc optional func tiledScrollView(_ scrollView: JCTiledScrollView, didReceiveTwoFingerTap gestureRecognizer: UIGestureRecognizer)
 }
 
-@objc protocol JCTileSource: NSObjectProtocol
-{
-    func tiledScrollView(_ scrollView: JCTiledScrollView, imageForRow row: Int, column: Int, scale: Int) -> UIImage!
+@objc protocol JCTileSource: NSObjectProtocol {
+    
+    func tiledScrollView(_ scrollView: JCTiledScrollView, imageForRow row: Int, column: Int, scale: Int) -> UIImage
 }
 
-@objc class JCTiledScrollView: UIView
-{
+@objc class JCTiledScrollView: UIView {
+    
     //Delegates
     weak var tiledScrollViewDelegate: JCTiledScrollViewDelegate?
     weak var dataSource: JCTileSource?
@@ -369,21 +369,23 @@ let kJCTiledScrollViewAnimationTime = TimeInterval(0.1)
         }
     }
 
-    func addAnnotation(_ annotation: JCAnnotation)
-    {
+    func addAnnotation(_ annotation: JCAnnotation) {
+        
         self.annotations.insert(annotation)
 
         let screenPosition = self.screenPositionForAnnotation(annotation)
 
         if screenPosition.jc_isWithinBounds(bounds) {
 
-            let view = self.tiledScrollViewDelegate!.tiledScrollView(self, viewForAnnotation: annotation)
-            view?.position = screenPosition
-
-            let t = JCVisibleAnnotationTuple(annotation: annotation, view: view!)
-            self.visibleAnnotations.insert(t)
-
-            self.canvasView.addSubview(view!)
+            if let view = self.tiledScrollViewDelegate?.tiledScrollView(self, viewForAnnotation: annotation) {
+                
+                view.position = screenPosition
+                
+                let t = JCVisibleAnnotationTuple(annotation: annotation, view: view)
+                self.visibleAnnotations.insert(t)
+                
+                self.canvasView.addSubview(view)
+            }
         }
     }
 
@@ -451,25 +453,22 @@ extension JCTiledScrollView: UIScrollViewDelegate
 
 // MARK: - JCTiledBitmapViewDelegate
 
-extension JCTiledScrollView: JCTiledBitmapViewDelegate
-{
-
-    func tiledView(_ tiledView: JCTiledView, imageForRow row: Int, column: Int, scale: Int) -> UIImage
-    {
+extension JCTiledScrollView: JCTiledBitmapViewDelegate {
+    
+    func tiledView(_ tiledView: JCTiledView, imageForRow row: Int, column: Int, scale: Int) -> UIImage {
+        
         return self.dataSource!.tiledScrollView(self, imageForRow: row, column: column, scale: scale)
     }
-
 }
 
 // MARK: - UIGestureRecognizerDelegate
 
-extension JCTiledScrollView: UIGestureRecognizerDelegate
-{
-
-    func singleTapReceived(_ gestureRecognizer: UITapGestureRecognizer)
-    {
+extension JCTiledScrollView: UIGestureRecognizerDelegate {
+    
+    @objc func singleTapReceived(_ gestureRecognizer: UITapGestureRecognizer) {
+        
         if gestureRecognizer.isKind(of: JCAnnotationTapGestureRecognizer.self) {
-
+            
             let annotationGestureRecognizer = gestureRecognizer as! JCAnnotationTapGestureRecognizer
 
             previousSelectedAnnotationTuple = currentSelectedAnnotationTuple
@@ -510,8 +509,8 @@ extension JCTiledScrollView: UIGestureRecognizerDelegate
         }
     }
 
-    func doubleTapReceived(_ gestureRecognizer: UITapGestureRecognizer)
-    {
+    @objc func doubleTapReceived(_ gestureRecognizer: UITapGestureRecognizer) {
+        
         if self.zoomsInOnDoubleTap {
             let newZoom = self.scrollView.jc_zoomScaleByZoomingIn(1.0)
             self.makeMuteAnnotationUpdatesTrueFor(kJCTiledScrollViewAnimationTime)
@@ -533,8 +532,8 @@ extension JCTiledScrollView: UIGestureRecognizerDelegate
         self.tiledScrollViewDelegate?.tiledScrollView?(self, didReceiveDoubleTap: gestureRecognizer)
     }
 
-    func twoFingerTapReceived(_ gestureRecognizer: UITapGestureRecognizer)
-    {
+    @objc func twoFingerTapReceived(_ gestureRecognizer: UITapGestureRecognizer) {
+    
         if self.zoomsOutOnTwoFingerTap {
 
             let newZoom = self.scrollView.jc_zoomScaleByZoomingOut(1.0)
