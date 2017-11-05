@@ -12,14 +12,13 @@
 import UIKit
 import QuartzCore
 
-@objc protocol JCTiledViewDelegate
-{
+@objc protocol JCTiledViewDelegate {
 
 }
 
-@objc protocol JCTiledBitmapViewDelegate: JCTiledViewDelegate
-{
-    func tiledView(_ tiledView: JCTiledView, imageForRow row: Int, column: Int, scale: Int) -> UIImage!
+@objc protocol JCTiledBitmapViewDelegate: JCTiledViewDelegate {
+    
+    func tiledView(_ tiledView: JCTiledView, imageForRow row: Int, column: Int, scale: Int) -> UIImage
 }
 
 let kJCDefaultTileSize: CGFloat = 256.0
@@ -75,19 +74,21 @@ class JCTiledView: UIView
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func draw(_ rect: CGRect)
-    {
-        let ctx = UIGraphicsGetCurrentContext()
-        let scale = (ctx?.ctm.a)! / self.tiledLayer().contentsScale
+    override func draw(_ rect: CGRect) {
+        
+        guard let ctx = UIGraphicsGetCurrentContext() else { return }
+        
+        let scale = ctx.ctm.a / tiledLayer().contentsScale
 
-        let col = Int(rect.minX * scale / self.tileSize.width)
-        let row = Int(rect.minY * scale / self.tileSize.height)
+        let col = Int(rect.minX * scale / tileSize.width)
+        let row = Int(rect.minY * scale / tileSize.height)
 
-        let tileImage = (self.delegate as! JCTiledBitmapViewDelegate).tiledView(self, imageForRow: row, column: col, scale: Int(scale))
-        tileImage?.draw(in: rect)
+        if let tileImage = (delegate as? JCTiledBitmapViewDelegate)?.tiledView(self, imageForRow: row, column: col, scale: Int(scale)) {
+            tileImage.draw(in: rect)
+        }
 
-        if (self.shouldAnnotateRect) {
-            self.annotateRect(rect, inContext: ctx!)
+        if shouldAnnotateRect {
+            annotateRect(rect, inContext: ctx)
         }
     }
 
@@ -101,7 +102,7 @@ class JCTiledView: UIView
         UIColor.white.set()
         NSString.localizedStringWithFormat(" %0.0f", log2f(Float(scale))).draw(
         at: CGPoint(x: rect.minX, y: rect.minY),
-        withAttributes: [NSFontAttributeName: UIFont.boldSystemFont(ofSize: fontSize)]
+        withAttributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: fontSize)]
         )
 
         UIColor.red.set()
