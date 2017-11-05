@@ -13,8 +13,8 @@ import UIKit
 
 extension CGPoint
 {
-    func jc_isWithinBounds(bounds: CGRect) -> Bool
+    func jc_isWithinBounds(_ bounds: CGRect) -> Bool
     {
-        return CGRectContainsPoint(CGRectInset(bounds, -25.0, -25.0), self)
+        return bounds.insetBy(dx: -25.0, dy: -25.0).contains(self)
     }
 }

@@ -14,20 +14,20 @@ import Foundation
 
 class JCPDFDocument
 {
-    class func createX(documentURL: NSURL!, password: String!) -> CGPDFDocument?
+    class func createX(_ documentURL: URL!, password: String!) -> CGPDFDocument?
     {
         // Check for non-NULL CFURLRef
-        guard let document = CGPDFDocumentCreateWithURL(documentURL as CFURLRef) else {
+        guard let document = CGPDFDocument(documentURL as CFURL) else {
             return nil
         }
 
         // Encrypted
         // Try a blank password first, per Apple's Quartz PDF example
-        if CGPDFDocumentIsEncrypted(document) == true &&
-           CGPDFDocumentUnlockWithPassword(document, "") == false {
+        if document.isEncrypted == true &&
+           document.unlockWithPassword("") == false {
             // Nope, now let's try the provided password to unlock the PDF
-            if let cPasswordString = password.cStringUsingEncoding(NSUTF8StringEncoding) {
-                if CGPDFDocumentUnlockWithPassword(document, cPasswordString) == false {
+            if let cPasswordString = password.cString(using: String.Encoding.utf8) {
+                if document.unlockWithPassword(cPasswordString) == false {
                     // Unlock failed
 #if DEBUG
                     print("CGPDFDocumentCreateX: Unable to unlock \(documentURL)")
@@ -39,21 +39,21 @@ class JCPDFDocument
         return document
     }
 
-    class func needsPassword(documentURL: NSURL!, password: String!) -> Bool
+    class func needsPassword(_ documentURL: URL!, password: String!) -> Bool
     {
         var needsPassword = false
 
         // Check for non-NULL CFURLRef
-        guard let document = CGPDFDocumentCreateWithURL(documentURL as CFURLRef) else {
+        guard let document = CGPDFDocument(documentURL as CFURL) else {
             return needsPassword
         }
         // Encrypted
         // Try a blank password first, per Apple's Quartz PDF example
-        if CGPDFDocumentIsEncrypted(document) == true &&
-           CGPDFDocumentUnlockWithPassword(document, "") == false {
+        if document.isEncrypted == true &&
+           document.unlockWithPassword("") == false {
             // Nope, now let's try the provided password to unlock the PDF
-            if let cPasswordString = password.cStringUsingEncoding(NSUTF8StringEncoding) {
-                if CGPDFDocumentUnlockWithPassword(document, cPasswordString) == false {
+            if let cPasswordString = password.cString(using: String.Encoding.utf8) {
+                if document.unlockWithPassword(cPasswordString) == false {
                     needsPassword = true
                 }
             }

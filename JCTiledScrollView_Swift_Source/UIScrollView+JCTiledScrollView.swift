@@ -14,7 +14,7 @@ import UIKit
 extension UIScrollView
 {
 
-    func jc_zoomScaleByZoomingIn(numberOfLevels: CGFloat) -> CGFloat
+    func jc_zoomScaleByZoomingIn(_ numberOfLevels: CGFloat) -> CGFloat
     {
 
         let newZoom = CGFloat(
@@ -26,7 +26,7 @@ extension UIScrollView
         return newZoom
     }
 
-    func jc_zoomScaleByZoomingOut(numberOfLevels: CGFloat) -> CGFloat
+    func jc_zoomScaleByZoomingOut(_ numberOfLevels: CGFloat) -> CGFloat
     {
 
         let newZoom = CGFloat(
@@ -38,7 +38,7 @@ extension UIScrollView
         return newZoom
     }
 
-    func jc_setContentCenter(center: CGPoint, animated: Bool)
+    func jc_setContentCenter(_ center: CGPoint, animated: Bool)
     {
         var newContentOffset = self.contentOffset
 

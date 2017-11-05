@@ -13,8 +13,8 @@ import UIKit
 
 @objc class JCAnnotationView: UIView
 {
-    private var _position: CGPoint = CGPointZero
-    private var _centerOffset: CGPoint = CGPointZero
+    fileprivate var _position: CGPoint = CGPoint.zero
+    fileprivate var _centerOffset: CGPoint = CGPoint.zero
 
     var annotation: JCAnnotation?
     var reuseIdentifier: String = ""
@@ -26,7 +26,7 @@ import UIKit
         }
         set
         {
-            if (!CGPointEqualToPoint(_position, newValue)) {
+            if (!_position.equalTo(newValue)) {
                 _position = newValue
                 adjustCenter()
             }
@@ -40,7 +40,7 @@ import UIKit
         }
         set
         {
-            if (!CGPointEqualToPoint(_centerOffset, newValue)) {
+            if (!_centerOffset.equalTo(newValue)) {
                 _centerOffset = newValue
                 adjustCenter()
             }
@@ -60,9 +60,9 @@ import UIKit
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func adjustCenter()
+    fileprivate func adjustCenter()
     {
-        center = CGPointMake(position.x + centerOffset.x, position.y + centerOffset.y)
+        center = CGPoint(x: position.x + centerOffset.x, y: position.y + centerOffset.y)
     }
 }
 

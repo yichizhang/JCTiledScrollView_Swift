@@ -21,6 +21,6 @@ import UIKit
 
 class JCAnnotation: NSObject, JCAnnotationProtocol
 {
-    var contentPosition = CGPointZero
+    var contentPosition = CGPoint.zero
 }
 
