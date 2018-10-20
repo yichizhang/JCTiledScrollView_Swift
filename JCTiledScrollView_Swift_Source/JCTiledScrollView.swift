@@ -162,10 +162,10 @@ let kJCTiledScrollViewAnimationTime = TimeInterval(0.1)
     {
         super.init(frame: frame)
 
-        autoresizingMask = [UIViewAutoresizing.flexibleHeight, UIViewAutoresizing.flexibleWidth]
+        autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
         scrollView = UIScrollView(frame: self.bounds)
-        scrollView.autoresizingMask = [UIViewAutoresizing.flexibleHeight, UIViewAutoresizing.flexibleWidth]
+        scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         scrollView.delegate = self
         scrollView.backgroundColor = UIColor.white
         scrollView.contentSize = contentSize
